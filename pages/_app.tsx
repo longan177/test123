@@ -10,6 +10,7 @@ import "@fontsource/roboto/700.css";
 
 import createEmotionCache from "../utility/createEmotionCache";
 import "../styles/globals.css";
+import BattleshipProvider from "../context/BattleshipContext";
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
@@ -21,8 +22,10 @@ const MyApp: React.FunctionComponent<MyAppProps> = props => {
 
   return (
     <CacheProvider value={emotionCache}>
-      <CssBaseline />
-      <Component {...pageProps} />
+      <BattleshipProvider>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </BattleshipProvider>
     </CacheProvider>
   );
 };
