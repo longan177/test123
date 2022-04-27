@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 
-const BATTLESHIPS = [
+type battleshipsType = {
+  id: number;
+  name: string;
+  size: number;
+}[];
+
+const BATTLESHIPS: battleshipsType = [
   { id: 1, name: "destroyer", size: 2 },
   { id: 2, name: "submarine", size: 3 },
   { id: 3, name: "cruiser", size: 3 },
@@ -8,7 +14,13 @@ const BATTLESHIPS = [
   { id: 5, name: "carrier", size: 5 },
 ];
 
-const BattleshipContext = React.createContext();
+type battleshipContextType = {
+  battleships: battleshipsType;
+};
+
+const BattleshipContext = React.createContext<battleshipContextType>({
+  battleships: BATTLESHIPS,
+});
 export function useShipContext() {
   return useContext(BattleshipContext);
 }

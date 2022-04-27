@@ -35,7 +35,7 @@ const Ship = ({ name, size }: Props) => {
           cursor: "pointer",
         },
       }}
-    ></Box>
+    />
   );
 };
 

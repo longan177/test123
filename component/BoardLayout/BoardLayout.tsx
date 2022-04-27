@@ -1,12 +1,9 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Box } from "@mui/material";
 import React from "react";
 import SingleGrid from "./SingleGrid";
-import styles from "./BoardLayout.module.css";
 
-type Props = {};
-
-const BoardLayout = (props: Props) => {
-  const totalGrid: any[] = [];
+const BoardLayout = () => {
+  const totalGrid: number[][] = [];
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
       totalGrid.push([i, j]);
@@ -31,26 +28,25 @@ const BoardLayout = (props: Props) => {
         return (
           <Grid key={id} alignContent="center" item md={6}>
             <Typography
-              mb={1}
-              mt={1}
-              sx={{ fontSize: "2rem" }}
+              sx={{ margin: "1rem 0 1rem 0", fontSize: "2rem" }}
               variant="h2"
               align="center"
             >
               {title}
             </Typography>
-            <div className={`grid human-player ${styles.gridContainer}`}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(10,40px)",
+                gap: "0px",
+                justifyContent: "center",
+              }}
+            >
               {totalGrid.map(grid => {
                 const [x, y] = grid;
-                return (
-                  <SingleGrid
-                    coordinateX={x}
-                    coordinateY={y}
-                    key={`${x}${y}`}
-                  />
-                );
+                return <SingleGrid key={`${x}${y}`} />;
               })}
-            </div>
+            </Box>
           </Grid>
         );
       })}

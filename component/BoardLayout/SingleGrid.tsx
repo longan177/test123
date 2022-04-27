@@ -2,11 +2,6 @@ import { Box } from "@mui/material";
 import React from "react";
 import { useShipContext } from "../../context/BattleshipContext";
 
-type Props = {
-  coordinateX: number;
-  coordinateY: number;
-};
-
 const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
   event.preventDefault();
   console.log(`dragover`);
@@ -21,13 +16,12 @@ const onDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
   console.log(`DragEnter`);
 };
 
-const SingleGrid = ({ coordinateX, coordinateY }: Props) => {
+const SingleGrid = () => {
   return (
     <Box
       onDragOver={onDragOver}
       onDrop={onDrop}
       onDragEnter={onDragEnter}
-      className={`grid-cell grid-cell-${coordinateX}-${coordinateY} grid-empty`}
       sx={{
         margin: "0",
         border: "1px solid black",
@@ -45,7 +39,7 @@ const SingleGrid = ({ coordinateX, coordinateY }: Props) => {
           cursor: "pointer",
         },
       }}
-    ></Box>
+    />
   );
 };
 

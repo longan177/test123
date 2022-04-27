@@ -1,22 +1,30 @@
-import { Box, Typography } from "@mui/material";
 import React from "react";
+import { Box } from "@mui/material";
 import { useShipContext } from "../../context/BattleshipContext";
-import styles from "./Battleships.module.css";
 import Ship from "./Ship";
 
-type Props = {};
-
-const Ships = (props: Props) => {
+const Ships = () => {
   const { battleships } = useShipContext();
-  console.log(battleships);
   return (
-    <div className={styles.battleshipsContainer}>
-      <div className={styles.shiplist}>
+    <Box
+      sx={{
+        padding: "1rem",
+      }}
+    >
+      <Box
+        sx={{
+          marginTop: "1rem",
+          display: "flex",
+          justifyContent: "center",
+          aligItems: "center",
+          gap: "1rem",
+        }}
+      >
         {battleships.map((ship, i) => {
           return <Ship key={i} {...ship} />;
         })}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
