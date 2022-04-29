@@ -1,5 +1,4 @@
 import { Grid, Typography, Box } from "@mui/material";
-import React from "react";
 import SingleGrid from "./SingleGrid";
 
 const BoardLayout = () => {

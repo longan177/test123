@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import React from "react";
-import { useShipContext } from "../../context/BattleshipContext";
 
 const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
   event.preventDefault();

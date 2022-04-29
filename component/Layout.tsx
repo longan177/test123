@@ -2,8 +2,6 @@ import { AppBar, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import React from "react";
 import DirectionsBoatIcon from "@mui/icons-material/DirectionsBoat";
-import { Icon } from "@mui/material";
-import { Box } from "@mui/system";
 
 type Props = {
   children: React.ReactNode;
