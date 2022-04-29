@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 
-type battleshipsType = {
+type BattleshipsType = {
   id: number;
   name: string;
   size: number;
 }[];
 
-const BATTLESHIPS: battleshipsType = [
+const BATTLESHIPS: BattleshipsType = [
   { id: 1, name: "destroyer", size: 2 },
   { id: 2, name: "submarine", size: 3 },
   { id: 3, name: "cruiser", size: 3 },
@@ -14,11 +14,11 @@ const BATTLESHIPS: battleshipsType = [
   { id: 5, name: "carrier", size: 5 },
 ];
 
-type battleshipContextType = {
-  battleships: battleshipsType;
+type BattleshipContextType = {
+  battleships: BattleshipsType;
 };
 
-const BattleshipContext = React.createContext<battleshipContextType>({
+const BattleshipContext = React.createContext<BattleshipContextType>({
   battleships: BATTLESHIPS,
 });
 export function useShipContext() {
@@ -29,7 +29,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const BattleshipProvider = ({ children }: Props) => {
+const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [battleships, setBattleships] = useState(BATTLESHIPS);
   let value = { battleships };
   return (

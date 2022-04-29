@@ -7,7 +7,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const Layout = ({ children }: Props) => {
+const Layout = ({ children }: Props): JSX.Element => {
   const AppBarStyle = {
     backgroundColor: "#fff",
     padding: "0.2rem",

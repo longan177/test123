@@ -1,21 +1,21 @@
 import { Box } from "@mui/material";
 import React from "react";
 
-const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-  event.preventDefault();
-  console.log(`dragover`);
-};
+const SingleGrid = (): JSX.Element => {
+  //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
+  const onDragOver = (event: React.DragEvent<HTMLDivElement>): void => {
+    event.preventDefault();
+    console.log(`dragover`);
+  };
 
-const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
-  event.preventDefault();
-  console.log(`drop`);
-};
-const onDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-  event.preventDefault();
-  console.log(`DragEnter`);
-};
-
-const SingleGrid = () => {
+  const onDrop = (event: React.DragEvent<HTMLDivElement>): void => {
+    event.preventDefault();
+    console.log(`drop`);
+  };
+  const onDragEnter = (event: React.DragEvent<HTMLDivElement>): void => {
+    event.preventDefault();
+    console.log(`DragEnter`);
+  };
   return (
     <Box
       onDragOver={onDragOver}

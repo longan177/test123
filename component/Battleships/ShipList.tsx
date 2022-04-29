@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { useShipContext } from "../../context/BattleshipContext";
 import Ship from "./Ship";
 
-const Ships = () => {
+const Ships = (): JSX.Element => {
   const { battleships } = useShipContext();
   return (
     <Box

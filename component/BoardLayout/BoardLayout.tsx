@@ -1,7 +1,7 @@
 import { Grid, Typography, Box } from "@mui/material";
 import SingleGrid from "./SingleGrid";
 
-const BoardLayout = () => {
+const BoardLayout = (): JSX.Element => {
   const totalGrid: number[][] = [];
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
@@ -9,7 +9,7 @@ const BoardLayout = () => {
     }
   }
 
-  const players = [
+  const players: { id: number; title: string }[] = [
     {
       id: 1,
       title: "Your Fleet",

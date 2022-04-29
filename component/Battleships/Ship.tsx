@@ -5,11 +5,12 @@ type Props = {
   size: number;
 };
 
-const onDragStart = (name: string) => {
-  console.log(name);
-};
+const Ship = ({ name, size }: Props): JSX.Element => {
+  //Just to detect if the ship is being dragged.
+  const onDragStart = (name: string): void => {
+    console.log(name);
+  };
 
-const Ship = ({ name, size }: Props) => {
   return (
     <Box
       draggable="true"
