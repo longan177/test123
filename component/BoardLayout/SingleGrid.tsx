@@ -1,7 +1,14 @@
 import { Box } from "@mui/material";
 import React from "react";
+import { useShipContext } from "../../context/BattleshipContext";
 
-const SingleGrid = (): JSX.Element => {
+type Props = {
+  coordinate: number;
+};
+
+const SingleGrid = ({ coordinate }: Props): JSX.Element => {
+  const { isDebugging } = useShipContext();
+
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
   const onDragOver = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault();
@@ -38,7 +45,9 @@ const SingleGrid = (): JSX.Element => {
           cursor: "pointer",
         },
       }}
-    />
+    >
+      {isDebugging && coordinate}
+    </Box>
   );
 };
 

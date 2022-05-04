@@ -1,15 +1,34 @@
-import { Box } from "@mui/material";
+import { Box, FormControlLabel, Switch } from "@mui/material";
 import { useShipContext } from "../../context/BattleshipContext";
 import Ship from "./Ship";
 
 const Ships = (): JSX.Element => {
-  const { battleships } = useShipContext();
+  const { battleships, isDebugging, setIsDebugging } = useShipContext();
   return (
     <Box
       sx={{
         padding: "1rem",
       }}
     >
+      <FormControlLabel
+        control={
+          <Switch
+            checked={isDebugging}
+            onChange={e => {
+              setIsDebugging(!isDebugging);
+            }}
+            color="primary"
+          />
+        }
+        label={`Debugging Mode : ${isDebugging ? "On" : "Off"}`}
+        labelPlacement="end"
+        sx={{
+          display: "block",
+          margin: "auto",
+          textAlign: "center",
+        }}
+      />
+
       <Box
         sx={{
           marginTop: "1rem",

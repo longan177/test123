@@ -6,6 +6,13 @@ type BattleshipsType = {
   size: number;
 }[];
 
+type BattleshipContextType = {
+  battleships: BattleshipsType;
+  setBattleships: React.Dispatch<React.SetStateAction<BattleshipsType>>;
+  isDebugging: boolean;
+  setIsDebugging: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 const BATTLESHIPS: BattleshipsType = [
   { id: 1, name: "destroyer", size: 2 },
   { id: 2, name: "submarine", size: 3 },
@@ -14,12 +21,11 @@ const BATTLESHIPS: BattleshipsType = [
   { id: 5, name: "carrier", size: 5 },
 ];
 
-type BattleshipContextType = {
-  battleships: BattleshipsType;
-};
-
 const BattleshipContext = React.createContext<BattleshipContextType>({
   battleships: BATTLESHIPS,
+  setBattleships: () => {},
+  isDebugging: false,
+  setIsDebugging: () => {},
 });
 export function useShipContext() {
   return useContext(BattleshipContext);
@@ -31,7 +37,8 @@ type Props = {
 
 const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [battleships, setBattleships] = useState(BATTLESHIPS);
-  let value = { battleships };
+  const [isDebugging, setIsDebugging] = useState(true);
+  let value = { battleships, setBattleships, isDebugging, setIsDebugging };
   return (
     <BattleshipContext.Provider value={value}>
       {children}

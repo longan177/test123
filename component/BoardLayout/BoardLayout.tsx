@@ -2,11 +2,9 @@ import { Grid, Typography, Box } from "@mui/material";
 import SingleGrid from "./SingleGrid";
 
 const BoardLayout = (): JSX.Element => {
-  const totalGrid: number[][] = [];
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-      totalGrid.push([i, j]);
-    }
+  const totalGrid: number[] = [];
+  for (let i = 1; i <= 100; i++) {
+    totalGrid.push(i);
   }
 
   const players: { id: number; title: string }[] = [
@@ -42,8 +40,7 @@ const BoardLayout = (): JSX.Element => {
               }}
             >
               {totalGrid.map(grid => {
-                const [x, y] = grid;
-                return <SingleGrid key={`${x}${y}`} />;
+                return <SingleGrid coordinate={grid} key={grid} />;
               })}
             </Box>
           </Grid>
