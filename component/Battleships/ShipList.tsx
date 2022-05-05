@@ -1,33 +1,45 @@
-import { Box, FormControlLabel, Switch } from "@mui/material";
+import {
+  Box,
+  FormControlLabel,
+  Switch,
+  Typography,
+  Alert,
+} from "@mui/material";
 import { useShipContext } from "../../context/BattleshipContext";
 import Ship from "./Ship";
 
 const Ships = (): JSX.Element => {
-  const { battleships, isDebugging, setIsDebugging } = useShipContext();
+  const { battleships, isDebugging, setIsDebugging, shipsOnBoard } =
+    useShipContext();
   return (
     <Box
       sx={{
         padding: "1rem",
       }}
     >
-      <FormControlLabel
-        control={
-          <Switch
-            checked={isDebugging}
-            onChange={e => {
-              setIsDebugging(!isDebugging);
-            }}
-            color="primary"
-          />
-        }
-        label={`Debugging Mode : ${isDebugging ? "On" : "Off"}`}
-        labelPlacement="end"
+      <Box
         sx={{
-          display: "block",
-          margin: "auto",
           textAlign: "center",
         }}
-      />
+      >
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isDebugging}
+              onChange={e => {
+                setIsDebugging(!isDebugging);
+              }}
+              color="primary"
+            />
+          }
+          label={`Debugging Mode : ${isDebugging ? "On" : "Off"}`}
+          labelPlacement="end"
+          sx={{
+            margin: "auto",
+            textAlign: "center",
+          }}
+        />
+      </Box>
 
       <Box
         sx={{
@@ -42,6 +54,21 @@ const Ships = (): JSX.Element => {
           return <Ship key={i} {...ship} />;
         })}
       </Box>
+      {isDebugging && (
+        <>
+          {" "}
+          <Typography mt={4} textAlign="center" variant="h4" component="div">
+            {" "}
+            Debugging Info
+          </Typography>
+          <Alert severity="info">
+            {shipsOnBoard.map((ship, i) => (
+              <li key={i}>{JSON.stringify(ship)}</li>
+            ))}
+          </Alert>
+          <Alert severity="success">{JSON.stringify(battleships)}</Alert>
+        </>
+      )}
     </Box>
   );
 };

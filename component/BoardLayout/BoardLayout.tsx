@@ -7,21 +7,23 @@ const BoardLayout = (): JSX.Element => {
     totalGrid.push(i);
   }
 
-  const players: { id: number; title: string }[] = [
+  const players: { id: number; title: string; canDrag: boolean }[] = [
     {
       id: 1,
       title: "Your Fleet",
+      canDrag: true,
     },
     {
       id: 2,
       title: "Enemy Fleet",
+      canDrag: false,
     },
   ];
 
   return (
     <Grid container>
       {players.map(player => {
-        const { id, title } = player;
+        const { id, title, canDrag } = player;
         return (
           <Grid key={id} alignContent="center" item md={6}>
             <Typography
@@ -40,7 +42,9 @@ const BoardLayout = (): JSX.Element => {
               }}
             >
               {totalGrid.map(grid => {
-                return <SingleGrid coordinate={grid} key={grid} />;
+                return (
+                  <SingleGrid canDrag={canDrag} coordinate={grid} key={grid} />
+                );
               })}
             </Box>
           </Grid>
