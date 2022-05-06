@@ -40,7 +40,6 @@ const Ships = (): JSX.Element => {
           }}
         />
       </Box>
-
       <Box
         sx={{
           marginTop: "1rem",
@@ -54,7 +53,8 @@ const Ships = (): JSX.Element => {
           return <Ship key={i} {...ship} />;
         })}
       </Box>
-      {isDebugging && (
+      {/* ----------------For debugging purpose only---------------- */}
+      {/* {isDebugging && (
         <>
           {" "}
           <Typography mt={4} textAlign="center" variant="h4" component="div">
@@ -68,7 +68,8 @@ const Ships = (): JSX.Element => {
           </Alert>
           <Alert severity="success">{JSON.stringify(battleships)}</Alert>
         </>
-      )}
+      )} */}
+      {/* ----------------For debugging purpose only---------------- */}
     </Box>
   );
 };

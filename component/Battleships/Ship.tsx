@@ -8,16 +8,10 @@ type Props = {
 };
 
 const Ship = ({ name, size, placed }: Props): JSX.Element => {
-  const {
-    isDebugging,
-    currentDrag,
-    setCurrentDrag,
-    currentFragment,
-    setCurrentFragment,
-  } = useShipContext();
+  const { isDebugging, setCurrentDrag, setCurrentFragment } = useShipContext();
   //Just to detect if the ship is being dragged.
   const onDragStart = (name: string): void => {
-    console.log(`dragstart`, name, size);
+    // console.log(`dragstart`, name, size);
     setCurrentDrag({ name, size });
   };
 

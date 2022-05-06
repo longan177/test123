@@ -38,9 +38,8 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   ): void => {
     event.preventDefault();
     const { name, size } = currentDrag;
-    console.log(`--------drop-------`, currentDrag);
+    // console.log(`--------drop-------`, currentDrag);
     let shipLastPosition = coordinate + size - currentFragment;
-    console.log(`shipLastPosition`, shipLastPosition);
     const notAllowHorizontal: number[] = [
       1, 11, 21, 31, 41, 51, 61, 71, 81, 91, 2, 12, 22, 32, 42, 52, 62, 72, 82,
       92, 3, 13, 23, 33, 43, 53, 63, 73, 83, 93, 4, 14, 24, 34, 44, 54, 64, 74,
@@ -54,30 +53,21 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       ...notAllowHorizontal.splice(0, (size - 1) * 10),
     ];
 
-    console.log("updated prohibited grid", updatedNotAllowHorizontal);
-    console.log(notAllowHorizontal.length);
-
-    const placeShip = () => {
-      console.log(`--------------placed ship---------------`);
-      console.log("name of battleship", name);
-      console.log("size of battleship", size);
-      console.log("lastPosition of battleship", shipLastPosition);
-      console.log(`--------------placed ship---------------`);
+    const placeShip = (): void => {
       let placedGrid: number[] = [];
       for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
         placedGrid.push(i);
       }
-      console.log(`placedGrid`, placedGrid);
-      const overlapGrid = shipsOnBoard.filter(value =>
+      const overlapGrid: number[] = shipsOnBoard.filter(value =>
         placedGrid.includes(value)
       );
 
       if (overlapGrid.length > 0) return;
       for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
-        console.log("added,", i);
         setShipsOnBoard(prev => [...prev, i]);
       }
 
+      // console.log("event from placeship");
       setBattleships(
         battleships.map(b => {
           if (b.name === name) {
@@ -91,13 +81,14 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     if (!updatedNotAllowHorizontal.includes(shipLastPosition)) {
       placeShip();
     } else {
-      console.log("You are not allowed to place here.");
+      // console.log("You are not allowed to place here.");
     }
   };
   const onDragEnter = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault();
-    console.log(`DragEnter`);
   };
+
+  const isInvolved = shipsOnBoard.includes(coordinate) && canDrag;
   return (
     <Box
       onDragOver={onDragOver}
@@ -124,8 +115,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
         alignItems: "center",
         width: 40,
         height: 40,
-        backgroundColor:
-          shipsOnBoard.includes(coordinate) && canDrag ? "red" : "#1e9eff",
+        backgroundColor: isInvolved && canDrag ? "red" : "#1e9eff",
         // boxShadow: "0 0 0 2px #000",
         transition: "all 0.05s linear",
         "&:hover": {
