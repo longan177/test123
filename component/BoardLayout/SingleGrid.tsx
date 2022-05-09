@@ -19,6 +19,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     currentFragment,
     shipsOnBoard,
     setShipsOnBoard,
+    enemyShipsOnBoard,
   } = useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
@@ -84,11 +85,13 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       // console.log("You are not allowed to place here.");
     }
   };
+
   const onDragEnter = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault();
   };
 
-  const isInvolved = shipsOnBoard.includes(coordinate) && canDrag;
+  const isTakenByPlayer = shipsOnBoard.includes(coordinate) && canDrag;
+  const isTakenByComputer = enemyShipsOnBoard?.includes(coordinate);
   return (
     <Box
       onDragOver={onDragOver}
@@ -115,7 +118,13 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
         alignItems: "center",
         width: 40,
         height: 40,
-        backgroundColor: isInvolved && canDrag ? "red" : "#1e9eff",
+        backgroundColor: canDrag
+          ? isTakenByPlayer
+            ? "red"
+            : "#1e9eff"
+          : isTakenByComputer && isDebugging
+          ? "yellow"
+          : "#1e9eff",
         // boxShadow: "0 0 0 2px #000",
         transition: "all 0.05s linear",
         "&:hover": {
