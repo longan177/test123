@@ -18,8 +18,10 @@ type BattleshipContextType = {
   >;
   currentFragment: number;
   setCurrentFragment: React.Dispatch<React.SetStateAction<number>>;
-  shipsOnBoard: number[];
-  setShipsOnBoard: React.Dispatch<React.SetStateAction<number[]>>;
+  shipsOnBoard: { coordinate: number; ship: string }[];
+  setShipsOnBoard: React.Dispatch<
+    React.SetStateAction<{ coordinate: number; ship: string }[]>
+  >;
   enemyShipsOnBoard: number[];
 };
 

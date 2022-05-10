@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BattleshipsType,
   useShipContext,
@@ -34,8 +34,10 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     coordinate: number,
     currentDrag: { name: string; size: number },
     currentFragment: number,
-    shipsOnBoard: number[],
-    setShipsOnBoard: React.Dispatch<React.SetStateAction<number[]>>
+    shipsOnBoard: { coordinate: number; ship: string }[],
+    setShipsOnBoard: React.Dispatch<
+      React.SetStateAction<{ coordinate: number; ship: string }[]>
+    >
   ): void => {
     event.preventDefault();
     const { name, size } = currentDrag;
@@ -59,13 +61,21 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
         placedGrid.push(i);
       }
-      const overlapGrid: number[] = shipsOnBoard.filter(value =>
+      let existingShips: number[] = [];
+      shipsOnBoard.forEach(s => {
+        for (let key in s) {
+          if (key === "name") return;
+          existingShips.push(s[key]);
+        }
+      });
+
+      const overlapGrid: number[] = existingShips.filter(value =>
         placedGrid.includes(value)
       );
 
       if (overlapGrid.length > 0) return;
       for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
-        setShipsOnBoard(prev => [...prev, i]);
+        setShipsOnBoard(prev => [...prev, { coordinate: i, ship: name }]);
       }
 
       // console.log("event from placeship");
@@ -90,8 +100,26 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     event.preventDefault();
   };
 
-  const isTakenByPlayer = shipsOnBoard.includes(coordinate) && canDrag;
+  // const isTakenByPlayer = shipsOnBoard.includes(coordinate) && canDrag;
   const isTakenByComputer = enemyShipsOnBoard?.includes(coordinate);
+
+  const [occupiedShip, setOccupiedShip] = useState("");
+  useEffect(() => {
+    shipsOnBoard.forEach(s => {
+      const [shipCoordinate, ship] = Object.values(s);
+      if (shipCoordinate === coordinate) {
+        setOccupiedShip(ship);
+      }
+    });
+  }, [shipsOnBoard]);
+
+  const battleshipColorStyling = (ship: string): string => {
+    if (ship === "destroyer") return "purple";
+    if (ship === "submarine") return "yellow";
+    if (ship === "cruiser") return "cyan";
+    if (ship === "battleship") return "pink";
+    if (ship === "carrier") return "lightgreen";
+  };
   return (
     <Box
       onDragOver={onDragOver}
@@ -119,8 +147,8 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
         width: 40,
         height: 40,
         backgroundColor: canDrag
-          ? isTakenByPlayer
-            ? "red"
+          ? occupiedShip
+            ? battleshipColorStyling(occupiedShip)
             : "#1e9eff"
           : isTakenByComputer && isDebugging
           ? "yellow"

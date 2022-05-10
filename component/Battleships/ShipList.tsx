@@ -54,7 +54,7 @@ const Ships = (): JSX.Element => {
         })}
       </Box>
       {/* ----------------For debugging purpose only---------------- */}
-      {/* {isDebugging && (
+      {isDebugging && (
         <>
           {" "}
           <Typography mt={4} textAlign="center" variant="h4" component="div">
@@ -68,7 +68,7 @@ const Ships = (): JSX.Element => {
           </Alert>
           <Alert severity="success">{JSON.stringify(battleships)}</Alert>
         </>
-      )} */}
+      )}
       {/* ----------------For debugging purpose only---------------- */}
     </Box>
   );
