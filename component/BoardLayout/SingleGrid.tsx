@@ -101,20 +101,28 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     event.preventDefault();
   };
 
-  // console.log(shipsOnOpponentBoard);
-  // const isTakenByPlayer = shipsOnBoard.includes(coordinate) && canDrag;
-  const isTakenByComputer = shipsOnOpponentBoard?.includes(coordinate);
+  const isTakenByComputer = shipsOnOpponentBoard.some(
+    s => s.coordinate === coordinate
+  );
 
   const [occupiedShip, setOccupiedShip] = useState("");
   useEffect(() => {
-    shipsOnBoard.forEach(s => {
-      const [shipCoordinate, ship] = Object.values(s);
-      if (shipCoordinate === coordinate) {
-        setOccupiedShip(ship);
-      }
-    });
+    if (canDrag) {
+      const currentShip = shipsOnBoard.find(r => r.coordinate === coordinate);
+      setOccupiedShip(currentShip?.ship);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shipsOnBoard]);
 
+  useEffect(() => {
+    if (!canDrag) {
+      const currentShip = shipsOnOpponentBoard.find(
+        r => r.coordinate === coordinate
+      );
+      setOccupiedShip(currentShip?.ship);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const battleshipColorStyling = (ship: string): string => {
     if (ship === "destroyer") return "purple";
     if (ship === "submarine") return "yellow";
@@ -122,6 +130,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     if (ship === "battleship") return "pink";
     if (ship === "carrier") return "lightgreen";
   };
+
   return (
     <Box
       onDragOver={onDragOver}
@@ -153,7 +162,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
             ? battleshipColorStyling(occupiedShip)
             : "#1e9eff"
           : isTakenByComputer && isDebugging
-          ? "yellow"
+          ? battleshipColorStyling(occupiedShip)
           : "#1e9eff",
         // boxShadow: "0 0 0 2px #000",
         transition: "all 0.05s linear",

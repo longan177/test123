@@ -50,7 +50,7 @@ type Props = {
 /* -------------------------------------------------------------------------- */
 /*                           generate computer board                          */
 /* -------------------------------------------------------------------------- */
-let current: { coordinate: number; ship: string }[] = [];
+let computerBoardRandom: { coordinate: number; ship: string }[] = [];
 const generateBoard = (name: string) => {
   const shipSize = (() => {
     if (name === "destroyer") return 2;
@@ -98,32 +98,27 @@ const generateBoard = (name: string) => {
   for (let i = newNum; i < newNum + shipSize; i++) {
     addedShip.push(i);
   }
-  console.log("addedShip", addedShip);
-  if (current.some(r => addedShip.includes(r.coordinate))) {
+  // console.log("addedShip", addedShip);
+  if (computerBoardRandom.some(r => addedShip.includes(r.coordinate))) {
     generateBoard(name);
   } else {
     for (let i = newNum; i < newNum + shipSize; i++) {
       // console.log("added" + i);
-      current.push({ coordinate: i, ship: name });
+      computerBoardRandom.push({ coordinate: i, ship: name });
     }
   }
 
-  console.log("current", current);
-  // console.log("curernt in generatedBoard", current);
-  return current;
+  // console.log("computerBoardRandom", computerBoardRandom);
 };
 
+generateBoard("destroyer");
+generateBoard("submarine");
+generateBoard("cruiser");
+generateBoard("battleship");
+generateBoard("carrier");
 /* -------------------------------------------------------------------------- */
 /*                           generate computer board                          */
 /* -------------------------------------------------------------------------- */
-const RANDOMIZEDENEMYSHIPS: { coordinate: number; ship: string }[] = [
-  ...generateBoard("destroyer"),
-  ...generateBoard("submarine"),
-  ...generateBoard("cruiser"),
-  ...generateBoard("battleship"),
-  ...generateBoard("carrier"),
-];
-console.log("RANDOMIZEDENEMYSHIPS", RANDOMIZEDENEMYSHIPS);
 
 const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [battleships, setBattleships] = useState(BATTLESHIPS);
@@ -132,7 +127,7 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [currentFragment, setCurrentFragment] = useState(0);
   const [shipsOnBoard, setShipsOnBoard] = useState([]);
   const [shipsOnOpponentBoard, setShipsOnOpponentBoard] =
-    useState(RANDOMIZEDENEMYSHIPS);
+    useState(computerBoardRandom);
 
   let value = {
     battleships,
