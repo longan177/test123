@@ -108,14 +108,18 @@ const generateBoard = (name: string) => {
     }
   }
 
-  // console.log("computerBoardRandom", computerBoardRandom);
+  // console.log("computerBoardRandhhghggghgdgfhrthfghfghdfgfhfgdhhggghgnom", computerBoardRandom);
 };
 
-generateBoard("destroyer");
-generateBoard("submarine");
-generateBoard("cruiser");
-generateBoard("battleship");
-generateBoard("carrier");
+const battleshipList = [
+  "destroyer",
+  "submarine",
+  "cruiser",
+  "battleship",
+  "carrier",
+];
+battleshipList.forEach(ship => generateBoard(ship));
+
 /* -------------------------------------------------------------------------- */
 /*                           generate computer board                          */
 /* -------------------------------------------------------------------------- */

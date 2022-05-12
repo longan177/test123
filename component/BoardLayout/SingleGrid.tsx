@@ -20,7 +20,6 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     shipsOnBoard,
     setShipsOnBoard,
     shipsOnOpponentBoard,
-    setShipsOnOpponentBoard,
   } = useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,

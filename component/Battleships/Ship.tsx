@@ -16,29 +16,7 @@ const Ship = ({ name, size, placed }: Props): JSX.Element => {
   };
 
   const getPositionShip = (e: React.MouseEvent<HTMLDivElement>) => {
-    let fragment;
-    let clickedPosition = e.nativeEvent.offsetX;
-    switch (true) {
-      case clickedPosition <= 40:
-        fragment = 1;
-        break;
-      case clickedPosition <= 80:
-        fragment = 2;
-        break;
-      case clickedPosition <= 120:
-        fragment = 3;
-        break;
-      case clickedPosition <= 160:
-        fragment = 4;
-        break;
-      case clickedPosition <= 200:
-        fragment = 5;
-        break;
-
-      default:
-        fragment = null;
-    }
-    setCurrentFragment(fragment);
+    setCurrentFragment(Math.ceil(e.nativeEvent.offsetX / 40));
   };
 
   const debuggingGrid = isDebugging && {
