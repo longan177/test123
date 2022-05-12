@@ -19,7 +19,8 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     currentFragment,
     shipsOnBoard,
     setShipsOnBoard,
-    enemyShipsOnBoard,
+    shipsOnOpponentBoard,
+    setShipsOnOpponentBoard,
   } = useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
@@ -100,8 +101,9 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     event.preventDefault();
   };
 
+  // console.log(shipsOnOpponentBoard);
   // const isTakenByPlayer = shipsOnBoard.includes(coordinate) && canDrag;
-  const isTakenByComputer = enemyShipsOnBoard?.includes(coordinate);
+  const isTakenByComputer = shipsOnOpponentBoard?.includes(coordinate);
 
   const [occupiedShip, setOccupiedShip] = useState("");
   useEffect(() => {

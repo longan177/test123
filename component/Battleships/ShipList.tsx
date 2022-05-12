@@ -66,6 +66,11 @@ const Ships = (): JSX.Element => {
               <li key={i}>{JSON.stringify(ship)}</li>
             ))}
           </Alert>
+          <Alert severity="info">
+            {shipsOnBoard.map((ship, i) => (
+              <li key={i}>{JSON.stringify(ship)}</li>
+            ))}
+          </Alert>
           <Alert severity="success">{JSON.stringify(battleships)}</Alert>
         </>
       )}

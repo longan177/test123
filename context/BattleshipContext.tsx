@@ -22,7 +22,10 @@ type BattleshipContextType = {
   setShipsOnBoard: React.Dispatch<
     React.SetStateAction<{ coordinate: number; ship: string }[]>
   >;
-  enemyShipsOnBoard: number[];
+  shipsOnOpponentBoard: { coordinate: number; ship: string }[];
+  setShipsOnOpponentBoard: React.Dispatch<
+    React.SetStateAction<{ coordinate: number; ship: string }[]>
+  >;
 };
 
 const BATTLESHIPS: BattleshipsType = [
@@ -47,8 +50,16 @@ type Props = {
 /* -------------------------------------------------------------------------- */
 /*                           generate computer board                          */
 /* -------------------------------------------------------------------------- */
-let current: number[] = [];
-const generateBoard = (num: number): number[] => {
+let current: { coordinate: number; ship: string }[] = [];
+const generateBoard = (name: string) => {
+  const shipSize = (() => {
+    if (name === "destroyer") return 2;
+    if (name === "submarine") return 3;
+    if (name === "cruiser") return 3;
+    if (name === "battleship") return 4;
+    if (name === "carrier") return 5;
+  })();
+
   const getRandomWithExclude = (
     min: number,
     max: number,
@@ -73,7 +84,7 @@ const generateBoard = (num: number): number[] => {
   ];
 
   const updatedNotAllowHorizontal: number[] = [
-    ...notAllowHorizontal.splice(-(num - 1) * 10),
+    ...notAllowHorizontal.splice(-(shipSize - 1) * 10),
   ];
 
   // console.log("not allow for", num, updatedNotAllowHorizontal);
@@ -84,18 +95,20 @@ const generateBoard = (num: number): number[] => {
     100,
     updatedNotAllowHorizontal
   );
-  for (let i = newNum; i < newNum + num; i++) {
+  for (let i = newNum; i < newNum + shipSize; i++) {
     addedShip.push(i);
   }
-  if (current.some(r => addedShip.includes(r))) {
-    generateBoard(num);
+  console.log("addedShip", addedShip);
+  if (current.some(r => addedShip.includes(r.coordinate))) {
+    generateBoard(name);
   } else {
-    for (let i = newNum; i < newNum + num; i++) {
+    for (let i = newNum; i < newNum + shipSize; i++) {
       // console.log("added" + i);
-      current.push(i);
+      current.push({ coordinate: i, ship: name });
     }
   }
 
+  console.log("current", current);
   // console.log("curernt in generatedBoard", current);
   return current;
 };
@@ -103,14 +116,14 @@ const generateBoard = (num: number): number[] => {
 /* -------------------------------------------------------------------------- */
 /*                           generate computer board                          */
 /* -------------------------------------------------------------------------- */
-const enemyShipsOnBoard: number[] = [
-  ...generateBoard(2),
-  ...generateBoard(3),
-  ...generateBoard(3),
-  ...generateBoard(4),
-  ...generateBoard(5),
+const RANDOMIZEDENEMYSHIPS: { coordinate: number; ship: string }[] = [
+  ...generateBoard("destroyer"),
+  ...generateBoard("submarine"),
+  ...generateBoard("cruiser"),
+  ...generateBoard("battleship"),
+  ...generateBoard("carrier"),
 ];
-// console.log("enemyShipsOnBoard", enemyShipsOnBoard);
+console.log("RANDOMIZEDENEMYSHIPS", RANDOMIZEDENEMYSHIPS);
 
 const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [battleships, setBattleships] = useState(BATTLESHIPS);
@@ -118,6 +131,8 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [currentDrag, setCurrentDrag] = useState(null);
   const [currentFragment, setCurrentFragment] = useState(0);
   const [shipsOnBoard, setShipsOnBoard] = useState([]);
+  const [shipsOnOpponentBoard, setShipsOnOpponentBoard] =
+    useState(RANDOMIZEDENEMYSHIPS);
 
   let value = {
     battleships,
@@ -130,7 +145,8 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
     setCurrentFragment,
     shipsOnBoard,
     setShipsOnBoard,
-    enemyShipsOnBoard,
+    shipsOnOpponentBoard,
+    setShipsOnOpponentBoard,
   };
   return (
     <BattleshipContext.Provider value={value}>
