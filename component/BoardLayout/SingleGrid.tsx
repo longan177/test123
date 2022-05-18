@@ -1,5 +1,12 @@
 import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { RootState } from "../../redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  toggleIsPlaced,
+  decrement,
+} from "../../redux/features/battleshipSlice";
+
 import {
   BattleshipsType,
   useShipContext,
@@ -11,9 +18,20 @@ type Props = {
 };
 
 const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
+  /* -------------------------------------------------------------------------- */
+  /*                              value from redux                              */
+  /* -------------------------------------------------------------------------- */
+  const battleshipRedux = useSelector(
+    (state: RootState) => state.battleships.value
+  );
+
+  const dispatch = useDispatch();
+
+  /* -------------------------------------------------------------------------- */
+  /*                             value from context                             */
+  /* -------------------------------------------------------------------------- */
+
   const {
-    battleships,
-    setBattleships,
     isDebugging,
     currentDrag,
     currentFragment,
@@ -29,8 +47,6 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
 
   const onDrop = (
     event: React.DragEvent<HTMLDivElement>,
-    battleships: BattleshipsType,
-    setBattleships: React.Dispatch<React.SetStateAction<BattleshipsType>>,
     coordinate: number,
     currentDrag: { name: string; size: number },
     currentFragment: number,
@@ -73,14 +89,9 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       }
 
       // console.log("event from placeship");
-      setBattleships(
-        battleships.map(b => {
-          if (b.name === name) {
-            return { ...b, placed: true };
-          }
-          return b;
-        })
-      );
+
+      dispatch(toggleIsPlaced(name));
+      console.log("battleship redux from singleGrid", battleshipRedux);
     };
 
     if (!updatedNotAllowHorizontal.includes(shipLastPosition)) {
@@ -131,8 +142,6 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
         if (!canDrag) return;
         onDrop(
           e,
-          battleships,
-          setBattleships,
           coordinate,
           currentDrag,
           currentFragment,

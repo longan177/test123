@@ -7,10 +7,16 @@ import {
 } from "@mui/material";
 import { useShipContext } from "../../context/BattleshipContext";
 import Ship from "./Ship";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 const Ships = (): JSX.Element => {
-  const { battleships, isDebugging, setIsDebugging, shipsOnBoard } =
-    useShipContext();
+  const { isDebugging, setIsDebugging, shipsOnBoard } = useShipContext();
+
+  const battleShipRedux = useSelector(
+    (state: RootState) => state.battleships.value
+  );
+
   return (
     <Box
       sx={{
@@ -40,18 +46,19 @@ const Ships = (): JSX.Element => {
           }}
         />
       </Box>
+
       <Box
         sx={{
-          marginTop: "1rem",
+          padding: "1rem",
           display: "flex",
           justifyContent: "center",
           aligItems: "center",
           gap: "1rem",
         }}
       >
-        {battleships.map((ship, i) => {
-          return <Ship key={i} {...ship} />;
-        })}
+        {battleShipRedux.map((ship, i) => (
+          <Ship key={i} {...ship} />
+        ))}
       </Box>
       {/* ----------------For debugging purpose only---------------- */}
       {isDebugging && (
@@ -66,12 +73,7 @@ const Ships = (): JSX.Element => {
               <li key={i}>{JSON.stringify(ship)}</li>
             ))}
           </Alert>
-          <Alert severity="info">
-            {shipsOnBoard.map((ship, i) => (
-              <li key={i}>{JSON.stringify(ship)}</li>
-            ))}
-          </Alert>
-          <Alert severity="success">{JSON.stringify(battleships)}</Alert>
+          <Alert severity="success">{JSON.stringify(battleShipRedux)}</Alert>
         </>
       )}
       {/* ----------------For debugging purpose only---------------- */}

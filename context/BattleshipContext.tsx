@@ -8,8 +8,6 @@ export type BattleshipsType = {
 }[];
 
 type BattleshipContextType = {
-  battleships: BattleshipsType;
-  setBattleships: React.Dispatch<React.SetStateAction<BattleshipsType>>;
   isDebugging: boolean;
   setIsDebugging: React.Dispatch<React.SetStateAction<boolean>>;
   currentDrag: { name: string; size: number };
@@ -27,14 +25,6 @@ type BattleshipContextType = {
     React.SetStateAction<{ coordinate: number; ship: string }[]>
   >;
 };
-
-const BATTLESHIPS: BattleshipsType = [
-  { id: 1, name: "destroyer", size: 2, placed: false },
-  { id: 2, name: "submarine", size: 3, placed: false },
-  { id: 3, name: "cruiser", size: 3, placed: false },
-  { id: 4, name: "battleship", size: 4, placed: false },
-  { id: 5, name: "carrier", size: 5, placed: false },
-];
 
 const BattleshipContext = React.createContext<BattleshipContextType | null>(
   null
@@ -125,7 +115,6 @@ battleshipList.forEach(ship => generateBoard(ship));
 /* -------------------------------------------------------------------------- */
 
 const BattleshipProvider = ({ children }: Props): JSX.Element => {
-  const [battleships, setBattleships] = useState(BATTLESHIPS);
   const [isDebugging, setIsDebugging] = useState(false);
   const [currentDrag, setCurrentDrag] = useState(null);
   const [currentFragment, setCurrentFragment] = useState(0);
@@ -134,8 +123,6 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
     useState(computerBoardRandom);
 
   let value = {
-    battleships,
-    setBattleships,
     isDebugging,
     setIsDebugging,
     currentDrag,
