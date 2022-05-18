@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export type BattleshipsType = {
   value: {
@@ -30,18 +30,10 @@ export const battleshipSlice = createSlice({
 
       state.value[targetShipIndex].placed = true;
     },
-
-    decrement: state => {
-      state.value[0].placed = false;
-    },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value[0].placed = false;
-    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { toggleIsPlaced, decrement, incrementByAmount } =
-  battleshipSlice.actions;
+export const { toggleIsPlaced } = battleshipSlice.actions;
 
 export default battleshipSlice.reducer;
