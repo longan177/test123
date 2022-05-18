@@ -61,13 +61,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
         placedGrid.push(i);
       }
-      let existingShips: number[] = [];
-      shipsOnBoard.forEach(s => {
-        for (let key in s) {
-          if (key === "name") return;
-          existingShips.push(s[key]);
-        }
-      });
+      let existingShips: number[] = shipsOnBoard.map(ship => ship.coordinate);
 
       const overlapGrid: number[] = existingShips.filter(value =>
         placedGrid.includes(value)
