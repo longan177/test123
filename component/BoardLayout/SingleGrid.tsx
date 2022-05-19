@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { RootState } from "../../redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleIsPlaced } from "../../redux/features/battleshipSlice";
+import { toggleIsPlaced } from "../../redux/features/battleshipSlice/battleshipSlice";
 import { insertShip } from "../../redux/features/boardSlice/boardSlice";
 import { useShipContext } from "../../context/BattleshipContext";
 
@@ -25,10 +25,6 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   );
 
   const dispatch = useDispatch();
-
-  /* -------------------------------------------------------------------------- */
-  /*                             value from context                             */
-  /* -------------------------------------------------------------------------- */
 
   const { isDebugging, currentDrag, currentFragment } = useShipContext();
 

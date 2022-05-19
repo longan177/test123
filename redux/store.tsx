@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./features/battleshipSlice";
+import battleshipReducer from "./features/battleshipSlice/battleshipSlice";
 import boardReducer from "./features/boardSlice/boardSlice";
 
 export const store = configureStore({
   reducer: {
-    battleships: counterReducer,
+    battleships: battleshipReducer,
     board: boardReducer,
   },
 });
