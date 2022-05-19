@@ -8,6 +8,8 @@ import {
   attackShip,
 } from "../../redux/features/boardSlice/boardSlice";
 import { useShipContext } from "../../context/BattleshipContext";
+import { Clear } from "@mui/icons-material";
+import { blueGrey } from "@mui/material/colors";
 
 type Props = {
   coordinate: number;
@@ -37,18 +39,20 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   };
 
   const handleClick = (coordinate: number) => {
-    if (
-      canDrag ||
-      !shipsOnOpponentBoardRedux.some(ship => ship.coordinate === coordinate)
-    )
-      return;
+    if (isAttack) return;
+    if (canDrag) return;
     //Find the corresponding battleship
+    setIsAttack(true);
 
-    const targetedBattleshipDetail = shipsOnOpponentBoardRedux.find(
-      ship => ship.coordinate === coordinate
-    );
+    if (
+      shipsOnOpponentBoardRedux.some(ship => ship.coordinate === coordinate)
+    ) {
+      const targetedBattleshipDetail = shipsOnOpponentBoardRedux.find(
+        ship => ship.coordinate === coordinate
+      );
 
-    dispatch(attackShip(targetedBattleshipDetail.ship));
+      dispatch(attackShip(targetedBattleshipDetail.ship));
+    }
   };
 
   const onDrop = (
@@ -114,6 +118,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   );
 
   const [occupiedShip, setOccupiedShip] = useState("");
+  const [isAttack, setIsAttack] = useState(false);
   useEffect(() => {
     if (canDrag) {
       const currentShip = shipsOnMyBoardRedux.find(
@@ -163,18 +168,27 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
           ? occupiedShip
             ? battleshipColorStyling(occupiedShip)
             : "#1e9eff"
+          : isAttack
+          ? isTakenByComputer
+            ? "red"
+            : "#6f7275"
           : isTakenByComputer && isDebugging
           ? battleshipColorStyling(occupiedShip)
           : "#1e9eff",
+
+        // isTakenByComputer && isDebugging
+        // ? battleshipColorStyling(occupiedShip)
+        // : "#1e9eff",
         // boxShadow: "0 0 0 2px #000",
         transition: "all 0.05s linear",
         "&:hover": {
-          backgroundColor: "red",
+          backgroundColor: blueGrey[200],
           cursor: "pointer",
         },
       }}
     >
-      {isDebugging && coordinate}
+      {/* {isDebugging && coordinate} */}
+      {isAttack && occupiedShip && <Clear fontSize="large" />}
     </Box>
   );
 };

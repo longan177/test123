@@ -71,7 +71,7 @@ const Ships = (): JSX.Element => {
             Debugging Info
           </Typography>
           Redux version --- MyBoard
-          <Alert severity="info">
+          {/* <Alert severity="info">
             {boardRedux.myBoard.map((ship, i) => (
               <li key={i}>{JSON.stringify(ship)}</li>
             ))}
@@ -81,7 +81,7 @@ const Ships = (): JSX.Element => {
             {boardRedux.opponentBoard.placement.map((ship, i) => (
               <li key={i}>{JSON.stringify(ship)}</li>
             ))}
-          </Alert>
+          </Alert> */}
           Opponent Ships Status
           <Alert severity="info">
             {JSON.stringify(boardRedux.opponentBoard.status)}
