@@ -21,7 +21,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   );
 
   const shipsOnMyBoardRedux = useSelector(
-    (state: RootState) => state.board.value.myBoard
+    (state: RootState) => state.board.value.myBoard.placement
   );
 
   const dispatch = useDispatch();
