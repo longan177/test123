@@ -82,6 +82,10 @@ const Ships = (): JSX.Element => {
               <li key={i}>{JSON.stringify(ship)}</li>
             ))}
           </Alert>
+          Opponent Ships Status
+          <Alert severity="info">
+            {JSON.stringify(boardRedux.opponentBoard.status)}
+          </Alert>
           <Alert severity="success">{JSON.stringify(battleShipRedux)}</Alert>
         </>
       )}

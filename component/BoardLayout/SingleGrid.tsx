@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import { RootState } from "../../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleIsPlaced } from "../../redux/features/battleshipSlice/battleshipSlice";
-import { insertShip } from "../../redux/features/boardSlice/boardSlice";
+import {
+  insertShip,
+  attackShip,
+} from "../../redux/features/boardSlice/boardSlice";
 import { useShipContext } from "../../context/BattleshipContext";
 
 type Props = {
@@ -31,6 +34,21 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
   const onDragOver = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault();
+  };
+
+  const handleClick = (coordinate: number) => {
+    if (
+      canDrag ||
+      !shipsOnOpponentBoardRedux.some(ship => ship.coordinate === coordinate)
+    )
+      return;
+    //Find the corresponding battleship
+
+    const targetedBattleshipDetail = shipsOnOpponentBoardRedux.find(
+      ship => ship.coordinate === coordinate
+    );
+
+    dispatch(attackShip(targetedBattleshipDetail.ship));
   };
 
   const onDrop = (
@@ -130,6 +148,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
         if (!canDrag) return;
         onDrop(e, coordinate, currentDrag, currentFragment);
       }}
+      onClick={() => handleClick(coordinate)}
       onDragEnter={onDragEnter}
       sx={{
         margin: "0",

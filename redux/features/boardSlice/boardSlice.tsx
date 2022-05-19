@@ -48,9 +48,17 @@ export const boardSlice = createSlice({
     insertShip: (state, action) => {
       state.value.myBoard.push(action.payload);
     },
+
+    attackShip: (state, action: PayloadAction<string>) => {
+      let targetShipStatus = state.value.opponentBoard.status[action.payload];
+      if (targetShipStatus) {
+        //prevent the status goes down to 0
+        state.value.opponentBoard.status[action.payload]--;
+      }
+    },
   },
 });
 
 // Other code such as selectors can use the imported `RootState` type
-export const { insertShip } = boardSlice.actions;
+export const { insertShip, attackShip } = boardSlice.actions;
 export default boardSlice.reducer;
