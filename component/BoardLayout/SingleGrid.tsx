@@ -41,6 +41,8 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   const handleClick = (coordinate: number) => {
     if (isAttack) return;
     if (canDrag) return;
+    if (shipsOnMyBoardRedux.length !== 17)
+      return console.log("player havent ready yet!!");
     //Find the corresponding battleship
     setIsAttack(true);
 
