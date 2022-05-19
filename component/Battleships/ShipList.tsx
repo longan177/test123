@@ -11,11 +11,13 @@ import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 
 const Ships = (): JSX.Element => {
-  const { isDebugging, setIsDebugging, shipsOnBoard } = useShipContext();
+  const { isDebugging, setIsDebugging } = useShipContext();
 
   const battleShipRedux = useSelector(
     (state: RootState) => state.battleships.value
   );
+
+  const boardRedux = useSelector((state: RootState) => state.board.value);
 
   return (
     <Box
@@ -68,8 +70,15 @@ const Ships = (): JSX.Element => {
             {" "}
             Debugging Info
           </Typography>
+          Redux version --- MyBoard
           <Alert severity="info">
-            {shipsOnBoard.map((ship, i) => (
+            {boardRedux.myBoard.map((ship, i) => (
+              <li key={i}>{JSON.stringify(ship)}</li>
+            ))}
+          </Alert>
+          Redux version --- Opponent Board
+          <Alert severity="info">
+            {boardRedux.opponentBoard.map((ship, i) => (
               <li key={i}>{JSON.stringify(ship)}</li>
             ))}
           </Alert>

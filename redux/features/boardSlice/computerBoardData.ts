@@ -1,38 +1,4 @@
-import React, { useState, useContext } from "react";
-
-export type BattleshipsType = {
-  id: number;
-  name: string;
-  size: number;
-  placed: boolean;
-}[];
-
-type BattleshipContextType = {
-  isDebugging: boolean;
-  setIsDebugging: React.Dispatch<React.SetStateAction<boolean>>;
-  currentDrag: { name: string; size: number };
-  setCurrentDrag: React.Dispatch<
-    React.SetStateAction<{ name: string; size: number }>
-  >;
-  currentFragment: number;
-  setCurrentFragment: React.Dispatch<React.SetStateAction<number>>;
-};
-
-const BattleshipContext = React.createContext<BattleshipContextType | null>(
-  null
-);
-export function useShipContext() {
-  return useContext(BattleshipContext);
-}
-
-type Props = {
-  children: React.ReactNode;
-};
-
-/* -------------------------------------------------------------------------- */
-/*                           generate computer board                          */
-/* -------------------------------------------------------------------------- */
-let computerBoardRandom: { coordinate: number; ship: string }[] = [];
+const computerBoardRandom: { coordinate: number; ship: string }[] = [];
 const generateBoard = (name: string) => {
   const shipSize = (() => {
     if (name === "destroyer") return 2;
@@ -102,28 +68,4 @@ const battleshipList = [
 ];
 battleshipList.forEach(ship => generateBoard(ship));
 
-/* -------------------------------------------------------------------------- */
-/*                           generate computer board                          */
-/* -------------------------------------------------------------------------- */
-
-const BattleshipProvider = ({ children }: Props): JSX.Element => {
-  const [isDebugging, setIsDebugging] = useState(false);
-  const [currentDrag, setCurrentDrag] = useState(null);
-  const [currentFragment, setCurrentFragment] = useState(0);
-
-  let value = {
-    isDebugging,
-    setIsDebugging,
-    currentDrag,
-    setCurrentDrag,
-    currentFragment,
-    setCurrentFragment,
-  };
-  return (
-    <BattleshipContext.Provider value={value}>
-      {children}
-    </BattleshipContext.Provider>
-  );
-};
-
-export default BattleshipProvider;
+export default computerBoardRandom;

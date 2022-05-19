@@ -2,15 +2,9 @@ import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { RootState } from "../../redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  toggleIsPlaced,
-  decrement,
-} from "../../redux/features/battleshipSlice";
-
-import {
-  BattleshipsType,
-  useShipContext,
-} from "../../context/BattleshipContext";
+import { toggleIsPlaced } from "../../redux/features/battleshipSlice";
+import { insertShip } from "../../redux/features/boardSlice/boardSlice";
+import { useShipContext } from "../../context/BattleshipContext";
 
 type Props = {
   coordinate: number;
@@ -21,8 +15,13 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   /* -------------------------------------------------------------------------- */
   /*                              value from redux                              */
   /* -------------------------------------------------------------------------- */
-  const battleshipRedux = useSelector(
-    (state: RootState) => state.battleships.value
+
+  const shipsOnOpponentBoardRedux = useSelector(
+    (state: RootState) => state.board.value.opponentBoard
+  );
+
+  const shipsOnMyBoardRedux = useSelector(
+    (state: RootState) => state.board.value.myBoard
   );
 
   const dispatch = useDispatch();
@@ -31,14 +30,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   /*                             value from context                             */
   /* -------------------------------------------------------------------------- */
 
-  const {
-    isDebugging,
-    currentDrag,
-    currentFragment,
-    shipsOnBoard,
-    setShipsOnBoard,
-    shipsOnOpponentBoard,
-  } = useShipContext();
+  const { isDebugging, currentDrag, currentFragment } = useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
   const onDragOver = (event: React.DragEvent<HTMLDivElement>): void => {
@@ -49,11 +41,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     event: React.DragEvent<HTMLDivElement>,
     coordinate: number,
     currentDrag: { name: string; size: number },
-    currentFragment: number,
-    shipsOnBoard: { coordinate: number; ship: string }[],
-    setShipsOnBoard: React.Dispatch<
-      React.SetStateAction<{ coordinate: number; ship: string }[]>
-    >
+    currentFragment: number
   ): void => {
     event.preventDefault();
     const { name, size } = currentDrag;
@@ -77,21 +65,23 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
         placedGrid.push(i);
       }
-      let existingShips: number[] = shipsOnBoard.map(ship => ship.coordinate);
+      let existingShipsRedux: number[] = shipsOnMyBoardRedux.map(
+        ship => ship.coordinate
+      );
 
-      const overlapGrid: number[] = existingShips.filter(value =>
+      const overlapGridRedux: number[] = existingShipsRedux.filter(value =>
         placedGrid.includes(value)
       );
 
-      if (overlapGrid.length > 0) return;
+      if (overlapGridRedux.length > 0) return;
+
       for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
-        setShipsOnBoard(prev => [...prev, { coordinate: i, ship: name }]);
+        dispatch(insertShip({ coordinate: i, ship: name }));
       }
 
       // console.log("event from placeship");
 
       dispatch(toggleIsPlaced(name));
-      console.log("battleship redux from singleGrid", battleshipRedux);
     };
 
     if (!updatedNotAllowHorizontal.includes(shipLastPosition)) {
@@ -105,22 +95,24 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     event.preventDefault();
   };
 
-  const isTakenByComputer = shipsOnOpponentBoard.some(
+  const isTakenByComputer = shipsOnOpponentBoardRedux.some(
     s => s.coordinate === coordinate
   );
 
   const [occupiedShip, setOccupiedShip] = useState("");
   useEffect(() => {
     if (canDrag) {
-      const currentShip = shipsOnBoard.find(r => r.coordinate === coordinate);
+      const currentShip = shipsOnMyBoardRedux.find(
+        r => r.coordinate === coordinate
+      );
       setOccupiedShip(currentShip?.ship);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shipsOnBoard]);
+  }, [shipsOnMyBoardRedux]);
 
   useEffect(() => {
     if (!canDrag) {
-      const currentShip = shipsOnOpponentBoard.find(
+      const currentShip = shipsOnOpponentBoardRedux.find(
         r => r.coordinate === coordinate
       );
       setOccupiedShip(currentShip?.ship);
@@ -140,14 +132,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       onDragOver={onDragOver}
       onDrop={e => {
         if (!canDrag) return;
-        onDrop(
-          e,
-          coordinate,
-          currentDrag,
-          currentFragment,
-          shipsOnBoard,
-          setShipsOnBoard
-        );
+        onDrop(e, coordinate, currentDrag, currentFragment);
       }}
       onDragEnter={onDragEnter}
       sx={{
