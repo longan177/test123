@@ -2,11 +2,30 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 import computerBoardRandom from "./computerBoardData";
 
+export type ShipStatusType = {
+  destroyer: number;
+  submarine: number;
+  cruiser: number;
+  battleship: number;
+  carrier: number;
+};
+
+const initialShipStatus: ShipStatusType = {
+  destroyer: 2,
+  submarine: 3,
+  cruiser: 3,
+  battleship: 4,
+  carrier: 5,
+};
+
 // Define a type for the slice state
 export type BoardType = {
   value: {
     myBoard: { coordinate: number; ship: string }[];
-    opponentBoard: { coordinate: number; ship: string }[];
+    opponentBoard: {
+      placement: { coordinate: number; ship: string }[];
+      status: ShipStatusType;
+    };
   };
 };
 
@@ -14,7 +33,10 @@ export type BoardType = {
 const initialState: BoardType = {
   value: {
     myBoard: [],
-    opponentBoard: computerBoardRandom,
+    opponentBoard: {
+      placement: computerBoardRandom,
+      status: { ...initialShipStatus },
+    },
   },
 };
 
