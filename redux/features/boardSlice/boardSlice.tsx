@@ -21,7 +21,11 @@ const initialShipStatus: ShipStatusType = {
 // Define a type for the slice state
 export type BoardType = {
   value: {
-    myBoard: { coordinate: number; ship: string }[];
+    myBoard: {
+      placement: { coordinate: number; ship: string }[];
+      status: ShipStatusType;
+    };
+
     opponentBoard: {
       placement: { coordinate: number; ship: string }[];
       status: ShipStatusType;
@@ -32,7 +36,10 @@ export type BoardType = {
 // Define the initial state using that type
 const initialState: BoardType = {
   value: {
-    myBoard: [],
+    myBoard: {
+      placement: [],
+      status: { ...initialShipStatus },
+    },
     opponentBoard: {
       placement: computerBoardRandom,
       status: { ...initialShipStatus },
@@ -46,7 +53,7 @@ export const boardSlice = createSlice({
   initialState,
   reducers: {
     insertShip: (state, action) => {
-      state.value.myBoard.push(action.payload);
+      state.value.myBoard.placement.push(action.payload);
     },
 
     attackShip: (state, action: PayloadAction<string>) => {
