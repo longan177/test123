@@ -21,6 +21,7 @@ type Props = {
 const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   const [isAttack, setIsAttack] = useState(false);
   const [occupiedShip, setOccupiedShip] = useState("");
+  const [isDestroyed, setIsDestroyed] = useState(false);
   /* -------------------------------------------------------------------------- */
   /*                              value from redux                              */
   /* -------------------------------------------------------------------------- */
@@ -35,6 +36,10 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
 
   const myShipsStatus = useSelector(
     (state: RootState) => state.board.value.myBoard.status
+  );
+
+  const opponentShipsStatus = useSelector(
+    (state: RootState) => state.board.value.opponentBoard.status
   );
 
   const dispatch = useDispatch();
@@ -151,6 +156,22 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   );
 
   useEffect(() => {
+    const targetShip = opponentShipsStatus[occupiedShip];
+    if (targetShip === 0 && !canDrag) {
+      setIsDestroyed(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opponentShipsStatus]);
+
+  useEffect(() => {
+    const playerTargetShip = myShipsStatus[occupiedShip];
+    if (playerTargetShip === 0 && canDrag) {
+      setIsDestroyed(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [myShipsStatus]);
+
+  useEffect(() => {
     if (canDrag) {
       const currentShip = shipsOnMyBoardRedux.find(
         r => r.coordinate === coordinate
@@ -192,6 +213,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     isTakenByComputer: boolean,
     isDebugging: boolean
   ) => {
+    if (isDestroyed) return "black";
     if (canDrag && isAttack && occupiedShip) return "#fff";
     if (canDrag && isAttack && !occupiedShip) return "red";
     if (canDrag && !isAttack && occupiedShip)
@@ -224,20 +246,6 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
         alignItems: "center",
         width: 40,
         height: 40,
-        //background check
-        //if (currentBoard is player){
-        //     if(the grid has been occupied){
-        //       battleshipColorStyling(occupiedship)
-        //      }else (#1e9eff)
-        //   }else if (currentBoard is computer){
-        //    if(is the grid been attacked??){
-        //      if(its placed by computer board){
-        //        red
-        //        }else(
-        //         #6f7275
-        //        )
-        //      }else(debugging mode?).......
-        // }
 
         backgroundColor: gridColor(
           canDrag,
@@ -246,11 +254,6 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
           isTakenByComputer,
           isDebugging
         ),
-
-        // isTakenByComputer && isDebugging
-        // ? battleshipColorStyling(occupiedShip)
-        // : "#1e9eff",
-        // boxShadow: "0 0 0 2px #000",
         transition: "all 0.05s linear",
         "&:hover": {
           backgroundColor: !isAttack && blueGrey[200],
