@@ -192,14 +192,14 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     isTakenByComputer: boolean,
     isDebugging: boolean
   ) => {
-    if (canDrag && isAttack && occupiedShip) return "red";
-    if (canDrag && isAttack && !occupiedShip) return "#6f7275";
+    if (canDrag && isAttack && occupiedShip) return "#fff";
+    if (canDrag && isAttack && !occupiedShip) return "red";
     if (canDrag && !isAttack && occupiedShip)
       return battleshipColorStyling(occupiedShip);
     if (canDrag && !isAttack && !occupiedShip) return "#1e9eff";
     //------------------------------------------------------
-    if (!canDrag && isAttack && isTakenByComputer) return "red";
-    if (!canDrag && isAttack && !isTakenByComputer) return "#6f7275";
+    if (!canDrag && isAttack && isTakenByComputer) return "#fff";
+    if (!canDrag && isAttack && !isTakenByComputer) return "red";
     if (!canDrag && !isAttack && occupiedShip && !isDebugging) return "#1e9eff";
     if (!canDrag && !isAttack && occupiedShip && isDebugging)
       return battleshipColorStyling(occupiedShip);
