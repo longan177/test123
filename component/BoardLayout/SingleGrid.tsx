@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { Clear } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { RootState } from "../../redux/store";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,10 +7,11 @@ import { toggleIsPlaced } from "../../redux/features/battleshipSlice/battleshipS
 import {
   insertShip,
   attackShip,
+  receiveAttack,
 } from "../../redux/features/boardSlice/boardSlice";
 import { useShipContext } from "../../context/BattleshipContext";
-import { Clear } from "@mui/icons-material";
 import { blueGrey } from "@mui/material/colors";
+import { getRandomWithExclude } from "../../redux/features/boardSlice/computerBoardData";
 
 type Props = {
   coordinate: number;
@@ -17,6 +19,8 @@ type Props = {
 };
 
 const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
+  const [isAttack, setIsAttack] = useState(false);
+  const [occupiedShip, setOccupiedShip] = useState("");
   /* -------------------------------------------------------------------------- */
   /*                              value from redux                              */
   /* -------------------------------------------------------------------------- */
@@ -29,20 +33,46 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     (state: RootState) => state.board.value.myBoard.placement
   );
 
+  const myShipsStatus = useSelector(
+    (state: RootState) => state.board.value.myBoard.status
+  );
+
   const dispatch = useDispatch();
 
-  const { isDebugging, currentDrag, currentFragment } = useShipContext();
+  const {
+    isDebugging,
+    currentDrag,
+    currentFragment,
+    playerGridReceivedAttack,
+    setPlayerGridReceivedAttack,
+  } = useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
   const onDragOver = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault();
   };
 
+  const receivedAttackFromOpponent = (() => {
+    return () => {
+      const randomNumberOneBetweenHundred: number = getRandomWithExclude(
+        1,
+        100,
+        playerGridReceivedAttack
+      );
+
+      setPlayerGridReceivedAttack(prev => [
+        ...prev,
+        randomNumberOneBetweenHundred,
+      ]);
+      dispatch(receiveAttack(randomNumberOneBetweenHundred));
+    };
+  })();
+
   const handleClick = (coordinate: number) => {
     if (isAttack) return;
     if (canDrag) return;
-    if (shipsOnMyBoardRedux.length !== 17)
-      return console.log("player havent ready yet!!");
+    // if (shipsOnMyBoardRedux.length !== 17)
+    //   return console.log("player havent ready yet!!");
     //Find the corresponding battleship
     setIsAttack(true);
 
@@ -55,6 +85,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
 
       dispatch(attackShip(targetedBattleshipDetail.ship));
     }
+    receivedAttackFromOpponent();
   };
 
   const onDrop = (
@@ -119,8 +150,6 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     s => s.coordinate === coordinate
   );
 
-  const [occupiedShip, setOccupiedShip] = useState("");
-  const [isAttack, setIsAttack] = useState(false);
   useEffect(() => {
     if (canDrag) {
       const currentShip = shipsOnMyBoardRedux.find(
@@ -140,12 +169,41 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (playerGridReceivedAttack.includes(coordinate) && canDrag) {
+      setIsAttack(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerGridReceivedAttack]);
+
   const battleshipColorStyling = (ship: string): string => {
     if (ship === "destroyer") return "purple";
     if (ship === "submarine") return "yellow";
     if (ship === "cruiser") return "cyan";
     if (ship === "battleship") return "pink";
     if (ship === "carrier") return "lightgreen";
+  };
+
+  const gridColor = (
+    canDrag: boolean,
+    isAttack: boolean,
+    occupiedShip: string,
+    isTakenByComputer: boolean,
+    isDebugging: boolean
+  ) => {
+    if (canDrag && isAttack && occupiedShip) return "red";
+    if (canDrag && isAttack && !occupiedShip) return "#6f7275";
+    if (canDrag && !isAttack && occupiedShip)
+      return battleshipColorStyling(occupiedShip);
+    if (canDrag && !isAttack && !occupiedShip) return "#1e9eff";
+    //------------------------------------------------------
+    if (!canDrag && isAttack && isTakenByComputer) return "red";
+    if (!canDrag && isAttack && !isTakenByComputer) return "#6f7275";
+    if (!canDrag && !isAttack && occupiedShip && !isDebugging) return "#1e9eff";
+    if (!canDrag && !isAttack && occupiedShip && isDebugging)
+      return battleshipColorStyling(occupiedShip);
+    if (!canDrag && !isAttack && !occupiedShip) return "#1e9eff";
   };
 
   return (
@@ -166,17 +224,28 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
         alignItems: "center",
         width: 40,
         height: 40,
-        backgroundColor: canDrag
-          ? occupiedShip
-            ? battleshipColorStyling(occupiedShip)
-            : "#1e9eff"
-          : isAttack
-          ? isTakenByComputer
-            ? "red"
-            : "#6f7275"
-          : isTakenByComputer && isDebugging
-          ? battleshipColorStyling(occupiedShip)
-          : "#1e9eff",
+        //background check
+        //if (currentBoard is player){
+        //     if(the grid has been occupied){
+        //       battleshipColorStyling(occupiedship)
+        //      }else (#1e9eff)
+        //   }else if (currentBoard is computer){
+        //    if(is the grid been attacked??){
+        //      if(its placed by computer board){
+        //        red
+        //        }else(
+        //         #6f7275
+        //        )
+        //      }else(debugging mode?).......
+        // }
+
+        backgroundColor: gridColor(
+          canDrag,
+          isAttack,
+          occupiedShip,
+          isTakenByComputer,
+          isDebugging
+        ),
 
         // isTakenByComputer && isDebugging
         // ? battleshipColorStyling(occupiedShip)
@@ -184,12 +253,13 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
         // boxShadow: "0 0 0 2px #000",
         transition: "all 0.05s linear",
         "&:hover": {
-          backgroundColor: blueGrey[200],
+          backgroundColor: !isAttack && blueGrey[200],
           cursor: "pointer",
         },
       }}
     >
-      {/* {isDebugging && coordinate} */}
+      <Box sx={{ position: "absolute" }}>{isDebugging && coordinate}</Box>
+
       {isAttack && occupiedShip && <Clear fontSize="large" />}
     </Box>
   );

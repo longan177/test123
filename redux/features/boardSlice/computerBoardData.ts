@@ -1,4 +1,22 @@
 const computerBoardRandom: { coordinate: number; ship: string }[] = [];
+
+export const getRandomWithExclude = (
+  min: number,
+  max: number,
+  excludeArray: number[]
+) => {
+  const randomNumber =
+    Math.floor(Math.random() * (max - min + 1 - excludeArray.length)) + min;
+  return (
+    randomNumber +
+    excludeArray
+      .sort((a, b) => a - b)
+      .reduce((acc, element) => {
+        return randomNumber >= element - acc ? acc + 1 : acc;
+      }, 0)
+  );
+};
+
 const generateBoard = (name: string) => {
   const shipSize = (() => {
     if (name === "destroyer") return 2;
@@ -7,23 +25,6 @@ const generateBoard = (name: string) => {
     if (name === "battleship") return 4;
     if (name === "carrier") return 5;
   })();
-
-  const getRandomWithExclude = (
-    min: number,
-    max: number,
-    excludeArray: number[]
-  ) => {
-    const randomNumber =
-      Math.floor(Math.random() * (max - min + 1 - excludeArray.length)) + min;
-    return (
-      randomNumber +
-      excludeArray
-        .sort((a, b) => a - b)
-        .reduce((acc, element) => {
-          return randomNumber >= element - acc ? acc + 1 : acc;
-        }, 0)
-    );
-  };
 
   let notAllowHorizontal: number[] = [
     7, 17, 27, 37, 47, 57, 67, 77, 87, 97, 8, 18, 28, 38, 48, 58, 68, 78, 88,

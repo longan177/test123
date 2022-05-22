@@ -5,8 +5,8 @@ import computerBoardRandom from "./computerBoardData";
 export type ShipStatusType = {
   destroyer: number;
   submarine: number;
-  cruiser: number;
   battleship: number;
+  cruiser: number;
   carrier: number;
 };
 
@@ -63,9 +63,17 @@ export const boardSlice = createSlice({
         state.value.opponentBoard.status[action.payload]--;
       }
     },
+    receiveAttack: (state, action) => {
+      let targetShip = state.value.myBoard.placement.find(
+        ship => ship.coordinate === action.payload
+      );
+      if (!targetShip) return console.log("tak kena!");
+      console.log(`the computer has hit ${targetShip.ship}`);
+      state.value.myBoard.status[targetShip.ship]--;
+    },
   },
 });
 
 // Other code such as selectors can use the imported `RootState` type
-export const { insertShip, attackShip } = boardSlice.actions;
+export const { insertShip, attackShip, receiveAttack } = boardSlice.actions;
 export default boardSlice.reducer;

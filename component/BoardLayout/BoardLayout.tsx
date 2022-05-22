@@ -1,6 +1,5 @@
 import { Grid, Typography, Box } from "@mui/material";
 import Board from "./Board";
-import SingleGrid from "./SingleGrid";
 
 const BoardLayout = (): JSX.Element => {
   const players: { id: number; title: string; canDrag: boolean }[] = [
