@@ -261,7 +261,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     >
       <Box sx={{ position: "absolute" }}>{isDebugging && coordinate}</Box>
 
-      {isAttack && occupiedShip && <Clear fontSize="large" />}
+      {isAttack && <Clear fontSize="large" />}
     </Box>
   );
 };
