@@ -11,6 +11,8 @@ type BattleshipContextType = {
   setCurrentFragment: React.Dispatch<React.SetStateAction<number>>;
   playerGridReceivedAttack: number[];
   setPlayerGridReceivedAttack: React.Dispatch<React.SetStateAction<number[]>>;
+  isGameFinish: boolean;
+  setIsGameFinish: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const BattleshipContext = React.createContext<BattleshipContextType | null>(
@@ -29,6 +31,7 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [currentDrag, setCurrentDrag] = useState(null);
   const [currentFragment, setCurrentFragment] = useState(0);
   const [playerGridReceivedAttack, setPlayerGridReceivedAttack] = useState([]);
+  const [isGameFinish, setIsGameFinish] = useState(false);
 
   let value = {
     isDebugging,
@@ -39,6 +42,8 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
     setCurrentFragment,
     playerGridReceivedAttack,
     setPlayerGridReceivedAttack,
+    isGameFinish,
+    setIsGameFinish,
   };
   return (
     <BattleshipContext.Provider value={value}>

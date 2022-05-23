@@ -50,6 +50,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     currentFragment,
     playerGridReceivedAttack,
     setPlayerGridReceivedAttack,
+    isGameFinish,
   } = useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
@@ -57,25 +58,22 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     event.preventDefault();
   };
 
-  const receivedAttackFromOpponent = (() => {
-    return () => {
-      const randomNumberOneBetweenHundred: number = getRandomWithExclude(
-        1,
-        100,
-        playerGridReceivedAttack
-      );
+  const receivedAttackFromOpponent = () => {
+    const randomNumberOneBetweenHundred: number = getRandomWithExclude(
+      1,
+      100,
+      playerGridReceivedAttack
+    );
 
-      setPlayerGridReceivedAttack(prev => [
-        ...prev,
-        randomNumberOneBetweenHundred,
-      ]);
-      dispatch(receiveAttack(randomNumberOneBetweenHundred));
-    };
-  })();
+    setPlayerGridReceivedAttack(prev => [
+      ...prev,
+      randomNumberOneBetweenHundred,
+    ]);
+    dispatch(receiveAttack(randomNumberOneBetweenHundred));
+  };
 
   const handleClick = (coordinate: number) => {
-    if (isAttack) return;
-    if (canDrag) return;
+    if (isAttack || canDrag || isGameFinish) return;
     if (shipsOnMyBoardRedux.length !== 17)
       return console.log("player havent ready yet!!");
     //Find the corresponding battleship
