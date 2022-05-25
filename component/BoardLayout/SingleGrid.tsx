@@ -114,7 +114,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       setOccupiedShip(currentShip?.ship);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [shipsOnOpponentBoardRedux]);
   const battleshipColorStyling = (ship: string): string => {
     if (ship === "destroyer") return "purple";
     if (ship === "submarine") return "yellow";

@@ -1,7 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../store";
+import { createSlice } from "@reduxjs/toolkit";
 import computerBoardRandom from "./computerBoardData";
-
 export type ShipStatusType = {
   destroyer: number;
   submarine: number;
@@ -41,23 +39,26 @@ const initialState: BoardType = {
       status: { ...initialShipStatus },
     },
     opponentBoard: {
-      placement: computerBoardRandom,
+      placement: [],
       status: { ...initialShipStatus },
     },
   },
 };
 
 export const boardSlice = createSlice({
-  name: "counter",
+  name: "battleship",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     insertShip: (state, action) => {
       state.value.myBoard.placement.push(action.payload);
     },
+    assignOpponentShips: state => {
+      state.value.opponentBoard.placement = computerBoardRandom;
+      console.log(state.value.opponentBoard.placement);
+    },
   },
 });
 
-// Other code such as selectors can use the imported `RootState` type
-export const { insertShip } = boardSlice.actions;
+export const { insertShip, assignOpponentShips } = boardSlice.actions;
 export default boardSlice.reducer;
