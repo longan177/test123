@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../store";
 import computerBoardRandom from "./computerBoardData";
 
 export type ShipStatusType = {
@@ -21,6 +20,8 @@ const initialShipStatus: ShipStatusType = {
 // Define a type for the slice state
 export type BoardType = {
   value: {
+    gameID: number;
+    isGameFinished: boolean;
     myBoard: {
       placement: { coordinate: number; ship: string }[];
       status: ShipStatusType;
@@ -30,12 +31,16 @@ export type BoardType = {
       placement: { coordinate: number; ship: string }[];
       status: ShipStatusType;
     };
+    name: string;
+    result: string;
   };
 };
 
 // Define the initial state using that type
 const initialState: BoardType = {
   value: {
+    gameID: 0,
+    isGameFinished: false,
     myBoard: {
       placement: [],
       status: { ...initialShipStatus },
@@ -44,6 +49,8 @@ const initialState: BoardType = {
       placement: computerBoardRandom,
       status: { ...initialShipStatus },
     },
+    name: "",
+    result: "",
   },
 };
 
@@ -70,9 +77,20 @@ export const boardSlice = createSlice({
       if (targetShip === undefined) return;
       state.value.myBoard.status[targetShip.ship as keyof ShipStatusType]--;
     },
+
+    saveToLocalStorage: state => {
+      state.value.gameID = Math.floor(Math.random());
+      localStorage.setItem(
+        JSON.stringify(state.value.gameID),
+        JSON.stringify(state)
+      );
+    },
+
+    createNewGame: state => {},
   },
 });
 
 // Other code such as selectors can use the imported `RootState` type
-export const { insertShip, attackShip, receiveAttack } = boardSlice.actions;
+export const { insertShip, attackShip, receiveAttack, saveToLocalStorage } =
+  boardSlice.actions;
 export default boardSlice.reducer;

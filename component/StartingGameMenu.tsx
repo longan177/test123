@@ -4,13 +4,15 @@ import Modal from "@mui/material/Modal";
 import { red, yellow } from "@mui/material/colors";
 import { Box, TextField, Alert } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { saveToLocalStorage } from "../redux/features/boardSlice/boardSlice";
 
 const TEMP_LOCALSTORAGE: number[] = []; //temporary s
 const StartingGameMenu = (): JSX.Element => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(true);
   const [isGameIDNotFound, setIsGameIDNotFound] = useState<boolean>(false);
-  const handleOpen = () => setOpen(true);
   const [gameIDInput, setGameIDInput] = useState<"">("");
+  const dispatch = useDispatch();
   const buttonStyling = {
     backgroundColor: yellow[400],
     width: "100%",
@@ -22,7 +24,7 @@ const StartingGameMenu = (): JSX.Element => {
       backgroundColor: yellow[600],
     },
   };
-  const handleInput = (value: any) => {
+  const handleInput = (value: any): void => {
     if (isNaN(value)) return;
     setGameIDInput(value);
     setIsGameIDNotFound(false);
@@ -32,6 +34,20 @@ const StartingGameMenu = (): JSX.Element => {
     if (!TEMP_LOCALSTORAGE.includes(+gameIDInput)) {
       setIsGameIDNotFound(true);
     }
+  };
+
+  const handleStart = () => {
+    newSingleGame();
+  };
+
+  const generateNewID = () => {
+    const currentNum = "1";
+    console.log(currentNum.padStart(6, "0"));
+  };
+  const newSingleGame = () => {
+    setOpen(false);
+    generateNewID();
+    dispatch(saveToLocalStorage());
   };
   return (
     <div>
@@ -43,6 +59,7 @@ const StartingGameMenu = (): JSX.Element => {
       >
         <Box
           sx={{
+            outline: "none",
             position: "absolute",
             top: "40%",
             left: "50%",
@@ -50,7 +67,7 @@ const StartingGameMenu = (): JSX.Element => {
             width: 500,
             height: 400,
             bgcolor: red[400],
-            border: "2px solid #000",
+            // border: "2px solid #000",
             p: 4,
           }}
         >
@@ -64,7 +81,11 @@ const StartingGameMenu = (): JSX.Element => {
               height: "100%",
             }}
           >
-            <Button sx={buttonStyling} variant="contained">
+            <Button
+              onClick={handleStart}
+              sx={buttonStyling}
+              variant="contained"
+            >
               New Game
             </Button>
             <form onSubmit={e => handleSubmit(e)}>
