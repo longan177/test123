@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import computerBoardRandom from "./computerBoardData";
-
 export type ShipStatusType = {
   destroyer: number;
   submarine: number;
@@ -46,7 +45,7 @@ const initialState: BoardType = {
       status: { ...initialShipStatus },
     },
     opponentBoard: {
-      placement: computerBoardRandom,
+      placement: [],
       status: { ...initialShipStatus },
     },
     name: "",
@@ -55,7 +54,7 @@ const initialState: BoardType = {
 };
 
 export const boardSlice = createSlice({
-  name: "counter",
+  name: "battleship",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
@@ -69,6 +68,10 @@ export const boardSlice = createSlice({
         //prevent the status goes down to 0
         state.value.opponentBoard.status[action.payload]--;
       }
+    },
+    assignOpponentShips: state => {
+      state.value.opponentBoard.placement = computerBoardRandom;
+      console.log(state.value.opponentBoard.placement);
     },
     receiveAttack: (state, action: PayloadAction<number>) => {
       let targetShip = state.value.myBoard.placement.find(
@@ -91,6 +94,12 @@ export const boardSlice = createSlice({
 });
 
 // Other code such as selectors can use the imported `RootState` type
-export const { insertShip, attackShip, receiveAttack, saveToLocalStorage } =
-  boardSlice.actions;
+export const {
+  insertShip,
+  assignOpponentShips,
+  attackShip,
+  receiveAttack,
+  saveToLocalStorage,
+} = boardSlice.actions;
+
 export default boardSlice.reducer;

@@ -187,7 +187,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       setOccupiedShip(currentShip?.ship);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [shipsOnOpponentBoardRedux]);
 
   useEffect(() => {
     if (playerGridReceivedAttack.includes(coordinate) && canDrag) {
