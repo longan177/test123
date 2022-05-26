@@ -19,7 +19,9 @@ const BattleshipContext = React.createContext<BattleshipContextType | null>(
   null
 );
 export function useShipContext() {
-  return useContext(BattleshipContext);
+  const contextValue = useContext(BattleshipContext);
+  if (contextValue === null) throw Error;
+  return contextValue;
 }
 
 type Props = {

@@ -3,6 +3,7 @@ import ShipList from "../component/Battleships/ShipList";
 import BoardLayout from "../component/BoardLayout/BoardLayout";
 import Layout from "../component/Layout";
 import TransitionsModal from "../component/Modal";
+import StartingGameMenu from "../component/StartingGameMenu";
 
 const Home: NextPage = () => {
   return (
@@ -10,6 +11,7 @@ const Home: NextPage = () => {
       <BoardLayout />
       <ShipList />
       <TransitionsModal />
+      <StartingGameMenu />
     </Layout>
   );
 };

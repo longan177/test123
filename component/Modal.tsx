@@ -1,4 +1,3 @@
-import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
@@ -54,10 +53,6 @@ const TransitionsModal = (): JSX.Element => {
         aria-describedby="transition-modal-description"
         open={open}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
       >
         <Fade in={open}>
           <Box

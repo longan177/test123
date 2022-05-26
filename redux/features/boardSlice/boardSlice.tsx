@@ -56,20 +56,19 @@ export const boardSlice = createSlice({
       state.value.myBoard.placement.push(action.payload);
     },
 
-    attackShip: (state, action: PayloadAction<string>) => {
+    attackShip: (state, action: PayloadAction<keyof ShipStatusType>) => {
       let targetShipStatus = state.value.opponentBoard.status[action.payload];
       if (targetShipStatus) {
         //prevent the status goes down to 0
         state.value.opponentBoard.status[action.payload]--;
       }
     },
-    receiveAttack: (state, action) => {
+    receiveAttack: (state, action: PayloadAction<number>) => {
       let targetShip = state.value.myBoard.placement.find(
         ship => ship.coordinate === action.payload
       );
-      if (!targetShip) return console.log("tak kena!");
-      console.log(`the computer has hit ${targetShip.ship}`);
-      state.value.myBoard.status[targetShip.ship]--;
+      if (targetShip === undefined) return;
+      state.value.myBoard.status[targetShip.ship as keyof ShipStatusType]--;
     },
   },
 });
