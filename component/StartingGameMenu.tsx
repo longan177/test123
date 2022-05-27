@@ -1,11 +1,11 @@
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { red, yellow } from "@mui/material/colors";
 import { Box, TextField, Alert } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { saveToLocalStorage } from "../redux/features/boardSlice/boardSlice";
+import { createNewGame } from "../redux/features/boardSlice/boardSlice";
+import Button from "./Button";
 
 const TEMP_LOCALSTORAGE: number[] = []; //temporary s
 const StartingGameMenu = (): JSX.Element => {
@@ -13,17 +13,7 @@ const StartingGameMenu = (): JSX.Element => {
   const [isGameIDNotFound, setIsGameIDNotFound] = useState<boolean>(false);
   const [gameIDInput, setGameIDInput] = useState<"">("");
   const dispatch = useDispatch();
-  const buttonStyling = {
-    backgroundColor: yellow[400],
-    width: "100%",
-    marginBottom: "1.5rem",
 
-    padding: ".7rem",
-    color: "#000",
-    "&:hover": {
-      backgroundColor: yellow[600],
-    },
-  };
   const handleInput = (value: any): void => {
     if (isNaN(value)) return;
     setGameIDInput(value);
@@ -40,14 +30,9 @@ const StartingGameMenu = (): JSX.Element => {
     newSingleGame();
   };
 
-  const generateNewID = () => {
-    const currentNum = "1";
-    console.log(currentNum.padStart(6, "0"));
-  };
   const newSingleGame = () => {
     setOpen(false);
-    generateNewID();
-    dispatch(saveToLocalStorage());
+    dispatch(createNewGame());
   };
   return (
     <div>
@@ -67,7 +52,6 @@ const StartingGameMenu = (): JSX.Element => {
             width: 500,
             height: 400,
             bgcolor: red[400],
-            // border: "2px solid #000",
             p: 4,
           }}
         >
@@ -81,20 +65,9 @@ const StartingGameMenu = (): JSX.Element => {
               height: "100%",
             }}
           >
-            <Button
-              onClick={handleStart}
-              sx={buttonStyling}
-              variant="contained"
-            >
-              New Game
-            </Button>
+            <Button onClick={handleStart}>New Game</Button>
             <form onSubmit={e => handleSubmit(e)}>
-              <Button
-                sx={buttonStyling}
-                variant="contained"
-                type="submit"
-                disabled={gameIDInput.length < 6}
-              >
+              <Button type="submit" disabled={gameIDInput.length < 6}>
                 Load Game
               </Button>
               <Typography

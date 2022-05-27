@@ -17,9 +17,11 @@ const BoardLayout = (): JSX.Element => {
       canDrag: false,
     },
   ];
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(assignOpponentShips());
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

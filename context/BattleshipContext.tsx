@@ -15,6 +15,7 @@ type BattleshipContextType = {
   setIsGameFinish: React.Dispatch<React.SetStateAction<boolean>>;
   hasGameStarted: boolean;
   sethasGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
+  s;
 };
 
 const BattleshipContext = React.createContext<BattleshipContextType | null>(

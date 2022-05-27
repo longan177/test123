@@ -19,7 +19,7 @@ const initialShipStatus: ShipStatusType = {
 // Define a type for the slice state
 export type BoardType = {
   value: {
-    gameID: number;
+    gameID: string;
     isGameFinished: boolean;
     myBoard: {
       placement: { coordinate: number; ship: string }[];
@@ -71,7 +71,6 @@ export const boardSlice = createSlice({
     },
     assignOpponentShips: state => {
       state.value.opponentBoard.placement = computerBoardRandom;
-      console.log(state.value.opponentBoard.placement);
     },
     receiveAttack: (state, action: PayloadAction<number>) => {
       let targetShip = state.value.myBoard.placement.find(
@@ -81,15 +80,17 @@ export const boardSlice = createSlice({
       state.value.myBoard.status[targetShip.ship as keyof ShipStatusType]--;
     },
 
-    saveToLocalStorage: state => {
-      state.value.gameID = Math.floor(Math.random());
-      localStorage.setItem(
-        JSON.stringify(state.value.gameID),
-        JSON.stringify(state)
-      );
+    createNewGame: state => {
+      const localData = JSON.parse(localStorage.getItem("board") || "[]");
+      const generateNewID = (number: number) => {
+        const currentNum = number.toString();
+        return currentNum.padStart(6, "0");
+      };
+      state.value.gameID = generateNewID(localData.length + 1);
+      const newState = [...localData, state.value];
+      localStorage.setItem("board", JSON.stringify(newState));
     },
-
-    createNewGame: state => {},
+    //why not terus read from here? HAHAHHAH
   },
 });
 
@@ -99,7 +100,7 @@ export const {
   assignOpponentShips,
   attackShip,
   receiveAttack,
-  saveToLocalStorage,
+  createNewGame,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
