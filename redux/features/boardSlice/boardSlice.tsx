@@ -38,7 +38,7 @@ export type BoardType = {
 // Define the initial state using that type
 const initialState: BoardType = {
   value: {
-    gameID: 0,
+    gameID: " ",
     isGameFinished: false,
     myBoard: {
       placement: [],

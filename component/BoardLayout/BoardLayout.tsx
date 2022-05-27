@@ -1,8 +1,10 @@
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useEffect } from "react";
 import Board from "./Board";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { assignOpponentShips } from "../../redux/features/boardSlice/boardSlice";
+import GameID from "../GameID";
+import { RootState } from "../../redux/store";
 
 const BoardLayout = (): JSX.Element => {
   const players: { id: number; title: string; canDrag: boolean }[] = [
@@ -17,7 +19,7 @@ const BoardLayout = (): JSX.Element => {
       canDrag: false,
     },
   ];
-
+  const gameID = useSelector((state: RootState) => state.board.value.gameID);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(assignOpponentShips());
@@ -26,11 +28,14 @@ const BoardLayout = (): JSX.Element => {
   }, []);
 
   return (
-    <Grid container>
-      {players.map(player => {
-        return <Board key={player.id} {...player} />;
-      })}
-    </Grid>
+    <Box sx={{ position: "relative" }}>
+      <GameID title={gameID} />
+      <Grid container>
+        {players.map(player => {
+          return <Board key={player.id} {...player} />;
+        })}
+      </Grid>
+    </Box>
   );
 };
 
