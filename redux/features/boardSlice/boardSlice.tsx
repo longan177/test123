@@ -81,14 +81,16 @@ export const boardSlice = createSlice({
     },
 
     createNewGame: state => {
-      const localData = JSON.parse(localStorage.getItem("board") || "[]");
+      const localDataLength = localStorage.length;
       const generateNewID = (number: number) => {
         const currentNum = number.toString();
         return currentNum.padStart(6, "0");
       };
-      state.value.gameID = generateNewID(localData.length + 1);
-      const newState = [...localData, state.value];
-      localStorage.setItem("board", JSON.stringify(newState));
+      state.value.gameID = generateNewID(localDataLength + 1);
+      localStorage.setItem(
+        JSON.stringify(state.value.gameID),
+        JSON.stringify(state.value)
+      );
     },
     //why not terus read from here? HAHAHHAH
   },
