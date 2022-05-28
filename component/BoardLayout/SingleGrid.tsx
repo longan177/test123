@@ -3,11 +3,11 @@ import { Clear } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { RootState } from "../../redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleIsPlaced } from "../../redux/features/battleshipSlice/battleshipSlice";
 import {
   insertShip,
   attackShip,
   receiveAttack,
+  toggleIsPlaced,
 } from "../../redux/features/boardSlice/boardSlice";
 import { useShipContext } from "../../context/BattleshipContext";
 import { blueGrey } from "@mui/material/colors";

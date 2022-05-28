@@ -14,7 +14,7 @@ const Ships = (): JSX.Element => {
   const { isDebugging, setIsDebugging } = useShipContext();
 
   const battleShipRedux = useSelector(
-    (state: RootState) => state.battleships.value
+    (state: RootState) => state.board.value.playerBattleshipState
   );
 
   const boardRedux = useSelector((state: RootState) => state.board.value);

@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { red, yellow } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import { Box, TextField, Alert } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";

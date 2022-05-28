@@ -19,6 +19,7 @@ const BoardLayout = (): JSX.Element => {
       canDrag: false,
     },
   ];
+
   const gameID = useSelector((state: RootState) => state.board.value.gameID);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -26,6 +27,8 @@ const BoardLayout = (): JSX.Element => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {}, []);
 
   return (
     <Box sx={{ position: "relative" }}>

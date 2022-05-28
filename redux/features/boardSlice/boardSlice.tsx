@@ -8,18 +8,17 @@ export type ShipStatusType = {
   carrier: number;
 };
 
-const initialShipStatus: ShipStatusType = {
-  destroyer: 2,
-  submarine: 3,
-  cruiser: 3,
-  battleship: 4,
-  carrier: 5,
-};
+export type BattleshipsType = {
+  id: number;
+  name: string;
+  size: number;
+  placed: boolean;
+}[];
 
-// Define a type for the slice state
 export type BoardType = {
   value: {
     gameID: string;
+    playerBattleshipState: BattleshipsType;
     isGameFinished: boolean;
     myBoard: {
       placement: { coordinate: number; ship: string }[];
@@ -34,11 +33,27 @@ export type BoardType = {
     result: string;
   };
 };
+const initialBattleshipState: BattleshipsType = [
+  { id: 1, name: "destroyer", size: 2, placed: false },
+  { id: 2, name: "submarine", size: 3, placed: false },
+  { id: 3, name: "cruiser", size: 3, placed: false },
+  { id: 4, name: "battleship", size: 4, placed: false },
+  { id: 5, name: "carrier", size: 5, placed: false },
+];
+
+const initialShipStatus: ShipStatusType = {
+  destroyer: 2,
+  submarine: 3,
+  cruiser: 3,
+  battleship: 4,
+  carrier: 5,
+};
 
 // Define the initial state using that type
 const initialState: BoardType = {
   value: {
     gameID: " ",
+    playerBattleshipState: initialBattleshipState,
     isGameFinished: false,
     myBoard: {
       placement: [],
@@ -60,6 +75,13 @@ export const boardSlice = createSlice({
   reducers: {
     insertShip: (state, action) => {
       state.value.myBoard.placement.push(action.payload);
+    },
+
+    toggleIsPlaced: (state, action) => {
+      const targetShipIndex = state.value.playerBattleshipState.findIndex(
+        ship => ship.name === action.payload
+      );
+      state.value.playerBattleshipState[targetShipIndex].placed = true;
     },
 
     attackShip: (state, action: PayloadAction<keyof ShipStatusType>) => {
@@ -103,6 +125,7 @@ export const {
   attackShip,
   receiveAttack,
   createNewGame,
+  toggleIsPlaced,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
