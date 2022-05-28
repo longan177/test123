@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createNewGame } from "../redux/features/boardSlice/boardSlice";
 import Button from "./Button";
+import { useShipContext } from "../context/BattleshipContext";
 
 const TEMP_LOCALSTORAGE: number[] = []; //temporary s
 const StartingGameMenu = (): JSX.Element => {
@@ -13,7 +14,7 @@ const StartingGameMenu = (): JSX.Element => {
   const [isGameIDNotFound, setIsGameIDNotFound] = useState<boolean>(false);
   const [gameIDInput, setGameIDInput] = useState<"">("");
   const dispatch = useDispatch();
-
+  const { sethasGameStarted } = useShipContext();
   const handleInput = (value: any): void => {
     if (isNaN(value)) return;
     setGameIDInput(value);
@@ -32,6 +33,7 @@ const StartingGameMenu = (): JSX.Element => {
 
   const newSingleGame = () => {
     setOpen(false);
+    sethasGameStarted(true);
     dispatch(createNewGame());
   };
   return (

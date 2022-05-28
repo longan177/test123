@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { assignOpponentShips } from "../../redux/features/boardSlice/boardSlice";
 import GameID from "../GameID";
 import { RootState } from "../../redux/store";
+import { useShipContext } from "../../context/BattleshipContext";
 
 const BoardLayout = (): JSX.Element => {
   const players: { id: number; title: string; canDrag: boolean }[] = [
@@ -19,6 +20,8 @@ const BoardLayout = (): JSX.Element => {
       canDrag: false,
     },
   ];
+  const { hasGameStarted } = useShipContext();
+  const currentGameState = useSelector((state: RootState) => state.board.value);
 
   const gameID = useSelector((state: RootState) => state.board.value.gameID);
   const dispatch = useDispatch();
@@ -28,7 +31,14 @@ const BoardLayout = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (!hasGameStarted) return;
+    localStorage.setItem(
+      JSON.stringify(gameID),
+      JSON.stringify(currentGameState)
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentGameState]);
 
   return (
     <Box sx={{ position: "relative" }}>
