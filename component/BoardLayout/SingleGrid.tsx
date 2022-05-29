@@ -42,6 +42,10 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     (state: RootState) => state.board.value.opponentBoard.status
   );
 
+  const hasGameFinished = useSelector(
+    (state: RootState) => state.board.value.isGameFinished
+  );
+
   const dispatch = useDispatch();
 
   const {
@@ -50,7 +54,6 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     currentFragment,
     playerGridReceivedAttack,
     setPlayerGridReceivedAttack,
-    isGameFinish,
   } = useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
@@ -73,7 +76,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   };
 
   const handleClick = (coordinate: number) => {
-    if (isAttack || canDrag || isGameFinish) return;
+    if (isAttack || canDrag || hasGameFinished) return;
     if (shipsOnMyBoardRedux.length !== 17)
       return console.log("player havent ready yet!!");
     //Find the corresponding battleship

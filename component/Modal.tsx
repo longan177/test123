@@ -1,17 +1,22 @@
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
-import Typography from "@mui/material/Typography";
 import { RootState } from "../redux/store";
-import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect, FormEvent } from "react";
 import { useShipContext } from "../context/BattleshipContext";
+import { TextField, Typography, Fade, Modal, Box, Button } from "@mui/material";
+import {
+  stopTheGame,
+  submitResult,
+} from "../redux/features/boardSlice/boardSlice";
 
 const TransitionsModal = (): JSX.Element => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const [currentWinner, setCurrentWinner] = useState("");
-  const { setIsGameFinish } = useShipContext();
+  const [open, setOpen] = useState<boolean>(false);
+  const [hasSubmited, setHasSubmited] = useState<boolean>(false);
+  const [nameInput, setNameInput] = useState<string>("");
+  const [currentWinner, setCurrentWinner] = useState<string>("");
+
+  const hasGameFinished = useSelector(
+    (state: RootState) => state.board.value.isGameFinished
+  );
   const playerShipStatus = useSelector(
     (state: RootState) => state.board.value.myBoard.status
   );
@@ -20,6 +25,7 @@ const TransitionsModal = (): JSX.Element => {
     (state: RootState) => state.board.value.opponentBoard.status
   );
 
+  const dispatch = useDispatch();
   useEffect(() => {
     const totalOpponentHP: number = Object.values(opponentShipStatus).reduce(
       (prev, current) => current + prev,
@@ -32,9 +38,9 @@ const TransitionsModal = (): JSX.Element => {
     );
 
     if (!totalOpponentHP || !totalPlayerHP) {
-      handleOpen();
-      setIsGameFinish(true);
+      setOpen(true);
       setCurrentWinner(!totalOpponentHP ? "Player1" : "Player2");
+      dispatch(stopTheGame());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opponentShipStatus, playerShipStatus]);
@@ -45,6 +51,19 @@ const TransitionsModal = (): JSX.Element => {
     msgTitle: player === "Player1" ? "Congratulation!" : "Sorry!",
     msgDetail: player === "Player1" ? "You Win!" : "You Lose!",
   });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setHasSubmited(true);
+    dispatch(submitResult({ nameInput, currentWinner }));
+  };
+  const handleChange = (value: string) => {
+    // if (nameInput.length === 15) return;
+    //Allow alphebet only and empty string and space
+    if (/^[a-zA-Z ]*$/.test(value) || value === "") {
+      setNameInput(value);
+    }
+  };
 
   return (
     <div>
@@ -89,6 +108,43 @@ const TransitionsModal = (): JSX.Element => {
             >
               {resultMsg(currentWinner).msgDetail}
             </Typography>
+            <Box
+              sx={{
+                marginTop: "1rem",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {hasSubmited ? (
+                <Typography variant="h5" component="div">
+                  Thank you for your response
+                </Typography>
+              ) : (
+                <form onSubmit={e => handleSubmit(e)}>
+                  <TextField
+                    inputProps={{ maxLength: 15 }}
+                    size="small"
+                    label="Please enter your name"
+                    type="text"
+                    value={nameInput}
+                    onChange={e => handleChange(e.target.value)}
+                    variant="outlined"
+                  />
+                  <Button
+                    type="submit"
+                    disabled={nameInput.length < 3}
+                    sx={{
+                      display: "inline-block",
+                      height: "100%",
+                      flex: 1,
+                    }}
+                    variant="contained"
+                  >
+                    Submit
+                  </Button>
+                </form>
+              )}
+            </Box>
           </Box>
         </Fade>
       </Modal>

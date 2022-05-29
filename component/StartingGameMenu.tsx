@@ -12,11 +12,11 @@ const TEMP_LOCALSTORAGE: number[] = []; //temporary s
 const StartingGameMenu = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(true);
   const [isGameIDNotFound, setIsGameIDNotFound] = useState<boolean>(false);
-  const [gameIDInput, setGameIDInput] = useState<"">("");
+  const [gameIDInput, setGameIDInput] = useState<string>("");
   const dispatch = useDispatch();
   const { sethasGameStarted } = useShipContext();
-  const handleInput = (value: any): void => {
-    if (isNaN(value)) return;
+  const handleInput = (value: string): void => {
+    if (isNaN(+value)) return;
     setGameIDInput(value);
     setIsGameIDNotFound(false);
   };

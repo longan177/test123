@@ -114,7 +114,22 @@ export const boardSlice = createSlice({
         JSON.stringify(state.value)
       );
     },
-    //why not terus read from here? HAHAHHAH
+
+    stopTheGame: state => {
+      state.value.isGameFinished = true;
+    },
+    submitResult: (
+      state,
+      action: PayloadAction<{ nameInput: string; currentWinner: string }>
+    ) => {
+      state.value.isGameFinished = true;
+      state.value.name = action.payload.nameInput;
+      state.value.result = action.payload.currentWinner;
+      localStorage.setItem(
+        JSON.stringify(state.value.gameID),
+        JSON.stringify(state.value)
+      );
+    },
   },
 });
 
@@ -126,6 +141,8 @@ export const {
   receiveAttack,
   createNewGame,
   toggleIsPlaced,
+  submitResult,
+  stopTheGame,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
