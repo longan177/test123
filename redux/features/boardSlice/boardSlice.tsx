@@ -114,7 +114,6 @@ export const boardSlice = createSlice({
         JSON.stringify(state.value)
       );
     },
-    //why not terus read from here? HAHAHHAH
   },
 });
 
