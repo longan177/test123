@@ -37,6 +37,7 @@ const BoardLayout = (): JSX.Element => {
       JSON.stringify(gameID),
       JSON.stringify(currentGameState)
     );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGameState]);
 

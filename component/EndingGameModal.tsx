@@ -1,7 +1,6 @@
 import { RootState } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, FormEvent } from "react";
-import { useShipContext } from "../context/BattleshipContext";
 import { TextField, Typography, Fade, Modal, Box, Button } from "@mui/material";
 import {
   stopTheGame,
@@ -14,9 +13,6 @@ const TransitionsModal = (): JSX.Element => {
   const [nameInput, setNameInput] = useState<string>("");
   const [currentWinner, setCurrentWinner] = useState<string>("");
 
-  const hasGameFinished = useSelector(
-    (state: RootState) => state.board.value.isGameFinished
-  );
   const playerShipStatus = useSelector(
     (state: RootState) => state.board.value.myBoard.status
   );

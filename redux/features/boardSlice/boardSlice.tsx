@@ -63,7 +63,7 @@ const initialState: BoardType = {
       placement: [],
       status: { ...initialShipStatus },
     },
-    name: "",
+    name: "Anonymous",
     result: "",
   },
 };
