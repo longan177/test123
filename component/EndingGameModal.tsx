@@ -1,7 +1,6 @@
 import { RootState } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, FormEvent } from "react";
-import { useShipContext } from "../context/BattleshipContext";
 import { TextField, Typography, Fade, Modal, Box, Button } from "@mui/material";
 import {
   stopTheGame,

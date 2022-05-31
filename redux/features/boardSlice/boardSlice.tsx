@@ -67,7 +67,7 @@ const initialState: BoardType = {
       status: { ...initialShipStatus },
       gridReceivedAttack: [],
     },
-    name: "",
+    name: "Anonymous",
     result: "",
   },
 };
