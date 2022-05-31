@@ -8,6 +8,7 @@ import {
   attackShip,
   receiveAttack,
   toggleIsPlaced,
+  makeAnAttack,
 } from "../../redux/features/boardSlice/boardSlice";
 import { useShipContext } from "../../context/BattleshipContext";
 import { blueGrey } from "@mui/material/colors";
@@ -46,15 +47,17 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     (state: RootState) => state.board.value.isGameFinished
   );
 
+  const opponentGridReceivedAttack = useSelector(
+    (state: RootState) => state.board.value.opponentBoard.gridReceivedAttack
+  );
+
+  const playerGridReceivedAttack = useSelector(
+    (state: RootState) => state.board.value.myBoard.gridReceivedAttack
+  );
+
   const dispatch = useDispatch();
 
-  const {
-    isDebugging,
-    currentDrag,
-    currentFragment,
-    playerGridReceivedAttack,
-    setPlayerGridReceivedAttack,
-  } = useShipContext();
+  const { isDebugging, currentDrag, currentFragment } = useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
   const onDragOver = (event: React.DragEvent<HTMLDivElement>): void => {
@@ -62,16 +65,10 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   };
 
   const receivedAttackFromOpponent = () => {
-    const randomNumberOneBetweenHundred: number = getRandomWithExclude(
-      1,
-      100,
-      playerGridReceivedAttack
-    );
-
-    setPlayerGridReceivedAttack(prev => [
-      ...prev,
-      randomNumberOneBetweenHundred,
+    const randomNumberOneBetweenHundred: number = getRandomWithExclude(1, 100, [
+      ...playerGridReceivedAttack,
     ]);
+
     dispatch(receiveAttack(randomNumberOneBetweenHundred));
   };
 
@@ -79,8 +76,8 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     if (isAttack || canDrag || hasGameFinished) return;
     if (shipsOnMyBoardRedux.length !== 17)
       return console.log("player havent ready yet!!");
-    //Find the corresponding battleship
-    setIsAttack(true);
+    //if it's opponent board, make an attack!
+    if (!canDrag) dispatch(makeAnAttack(coordinate));
 
     if (
       shipsOnOpponentBoardRedux.some(ship => ship.coordinate === coordinate)
@@ -157,22 +154,6 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   );
 
   useEffect(() => {
-    const targetShip = opponentShipsStatus[occupiedShip];
-    if (targetShip === 0 && !canDrag) {
-      setIsDestroyed(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [opponentShipsStatus]);
-
-  useEffect(() => {
-    const playerTargetShip = myShipsStatus[occupiedShip];
-    if (playerTargetShip === 0 && canDrag) {
-      setIsDestroyed(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myShipsStatus]);
-
-  useEffect(() => {
     if (canDrag) {
       const currentShip = shipsOnMyBoardRedux.find(
         r => r.coordinate === coordinate
@@ -193,13 +174,37 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   }, [shipsOnOpponentBoardRedux]);
 
   useEffect(() => {
+    if (!isAttack) return;
+    const targetShip = opponentShipsStatus[occupiedShip];
+    if (targetShip === 0 && !canDrag) {
+      setIsDestroyed(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opponentShipsStatus, isAttack]);
+
+  useEffect(() => {
+    if (!isAttack) return;
+    const playerTargetShip = myShipsStatus[occupiedShip];
+    if (playerTargetShip === 0 && canDrag) {
+      setIsDestroyed(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [myShipsStatus, isAttack]);
+
+  useEffect(() => {
     if (playerGridReceivedAttack.includes(coordinate) && canDrag) {
       setIsAttack(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerGridReceivedAttack]);
 
-  const battleshipColorStyling = (ship: string): string => {
+  useEffect(() => {
+    if (opponentGridReceivedAttack.includes(coordinate) && !canDrag)
+      setIsAttack(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opponentGridReceivedAttack]);
+
+  const battleshipColorStyling = (ship: string) => {
     if (ship === "destroyer") return "purple";
     if (ship === "submarine") return "yellow";
     if (ship === "cruiser") return "cyan";

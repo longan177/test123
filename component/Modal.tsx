@@ -17,6 +17,7 @@ const TransitionsModal = (): JSX.Element => {
   const hasGameFinished = useSelector(
     (state: RootState) => state.board.value.isGameFinished
   );
+
   const playerShipStatus = useSelector(
     (state: RootState) => state.board.value.myBoard.status
   );
@@ -38,7 +39,7 @@ const TransitionsModal = (): JSX.Element => {
     );
 
     if (!totalOpponentHP || !totalPlayerHP) {
-      setOpen(true);
+      if (!hasGameFinished) setOpen(true);
       setCurrentWinner(!totalOpponentHP ? "Player1" : "Player2");
       dispatch(stopTheGame());
     }

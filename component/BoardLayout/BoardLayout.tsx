@@ -33,10 +33,7 @@ const BoardLayout = (): JSX.Element => {
 
   useEffect(() => {
     if (!hasGameStarted) return;
-    localStorage.setItem(
-      JSON.stringify(gameID),
-      JSON.stringify(currentGameState)
-    );
+    localStorage.setItem(gameID, JSON.stringify(currentGameState));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGameState]);
 

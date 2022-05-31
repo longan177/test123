@@ -9,8 +9,6 @@ type BattleshipContextType = {
   >;
   currentFragment: number;
   setCurrentFragment: React.Dispatch<React.SetStateAction<number>>;
-  playerGridReceivedAttack: number[];
-  setPlayerGridReceivedAttack: React.Dispatch<React.SetStateAction<number[]>>;
   hasGameStarted: boolean;
   sethasGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -32,7 +30,6 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [isDebugging, setIsDebugging] = useState(false);
   const [currentDrag, setCurrentDrag] = useState(null);
   const [currentFragment, setCurrentFragment] = useState(0);
-  const [playerGridReceivedAttack, setPlayerGridReceivedAttack] = useState([]);
   const [hasGameStarted, sethasGameStarted] = useState<boolean>(false);
 
   let value = {
@@ -42,8 +39,6 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
     setCurrentDrag,
     currentFragment,
     setCurrentFragment,
-    playerGridReceivedAttack,
-    setPlayerGridReceivedAttack,
     hasGameStarted,
     sethasGameStarted,
   };

@@ -23,11 +23,13 @@ export type BoardType = {
     myBoard: {
       placement: { coordinate: number; ship: string }[];
       status: ShipStatusType;
+      gridReceivedAttack: number[];
     };
 
     opponentBoard: {
       placement: { coordinate: number; ship: string }[];
       status: ShipStatusType;
+      gridReceivedAttack: number[];
     };
     name: string;
     result: string;
@@ -58,10 +60,12 @@ const initialState: BoardType = {
     myBoard: {
       placement: [],
       status: { ...initialShipStatus },
+      gridReceivedAttack: [],
     },
     opponentBoard: {
       placement: [],
       status: { ...initialShipStatus },
+      gridReceivedAttack: [],
     },
     name: "",
     result: "",
@@ -84,6 +88,10 @@ export const boardSlice = createSlice({
       state.value.playerBattleshipState[targetShipIndex].placed = true;
     },
 
+    makeAnAttack: (state, action) => {
+      state.value.opponentBoard.gridReceivedAttack.push(action.payload);
+    },
+
     attackShip: (state, action: PayloadAction<keyof ShipStatusType>) => {
       let targetShipStatus = state.value.opponentBoard.status[action.payload];
       if (targetShipStatus) {
@@ -91,10 +99,12 @@ export const boardSlice = createSlice({
         state.value.opponentBoard.status[action.payload]--;
       }
     },
+
     assignOpponentShips: state => {
       state.value.opponentBoard.placement = computerBoardRandom;
     },
     receiveAttack: (state, action: PayloadAction<number>) => {
+      state.value.myBoard.gridReceivedAttack.push(action.payload);
       let targetShip = state.value.myBoard.placement.find(
         ship => ship.coordinate === action.payload
       );
@@ -109,15 +119,17 @@ export const boardSlice = createSlice({
         return currentNum.padStart(6, "0");
       };
       state.value.gameID = generateNewID(localDataLength + 1);
-      localStorage.setItem(
-        JSON.stringify(state.value.gameID),
-        JSON.stringify(state.value)
-      );
+      localStorage.setItem(state.value.gameID, JSON.stringify(state.value));
     },
 
     stopTheGame: state => {
       state.value.isGameFinished = true;
     },
+
+    loadGameID: (state, action) => {
+      state.value = action.payload;
+    },
+
     submitResult: (
       state,
       action: PayloadAction<{ nameInput: string; currentWinner: string }>
@@ -125,10 +137,7 @@ export const boardSlice = createSlice({
       state.value.isGameFinished = true;
       state.value.name = action.payload.nameInput;
       state.value.result = action.payload.currentWinner;
-      localStorage.setItem(
-        JSON.stringify(state.value.gameID),
-        JSON.stringify(state.value)
-      );
+      localStorage.setItem(state.value.gameID, JSON.stringify(state.value));
     },
   },
 });
@@ -138,11 +147,13 @@ export const {
   insertShip,
   assignOpponentShips,
   attackShip,
+  makeAnAttack,
   receiveAttack,
   createNewGame,
   toggleIsPlaced,
   submitResult,
   stopTheGame,
+  loadGameID,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

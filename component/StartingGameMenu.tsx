@@ -4,27 +4,35 @@ import { red } from "@mui/material/colors";
 import { Box, TextField, Alert } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createNewGame } from "../redux/features/boardSlice/boardSlice";
+import {
+  createNewGame,
+  loadGameID,
+} from "../redux/features/boardSlice/boardSlice";
 import Button from "./Button";
 import { useShipContext } from "../context/BattleshipContext";
 
-const TEMP_LOCALSTORAGE: number[] = []; //temporary s
 const StartingGameMenu = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(true);
   const [isGameIDNotFound, setIsGameIDNotFound] = useState<boolean>(false);
   const [gameIDInput, setGameIDInput] = useState<string>("");
   const dispatch = useDispatch();
-  const { sethasGameStarted } = useShipContext();
   const handleInput = (value: string): void => {
     if (isNaN(+value)) return;
     setGameIDInput(value);
     setIsGameIDNotFound(false);
   };
+
+  const { sethasGameStarted } = useShipContext();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (!TEMP_LOCALSTORAGE.includes(+gameIDInput)) {
+    const boardData = localStorage.getItem(gameIDInput);
+    if (!boardData) {
       setIsGameIDNotFound(true);
+      return;
     }
+    dispatch(loadGameID(JSON.parse(boardData)));
+    sethasGameStarted(true);
+    setOpen(false);
   };
 
   const handleStart = () => {
@@ -36,6 +44,7 @@ const StartingGameMenu = (): JSX.Element => {
     sethasGameStarted(true);
     dispatch(createNewGame());
   };
+
   return (
     <div>
       <Modal
