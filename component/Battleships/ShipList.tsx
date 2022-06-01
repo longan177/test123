@@ -9,16 +9,26 @@ import { useShipContext } from "../../context/BattleshipContext";
 import Ship from "./Ship";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
+import Button from "../Button";
 
 const Ships = (): JSX.Element => {
-  const { isDebugging, setIsDebugging } = useShipContext();
+  const { isDebugging, setIsDebugging, setIsStartButtonOn, isStartButtonOn } =
+    useShipContext();
 
   const battleShipRedux = useSelector(
     (state: RootState) => state.board.value.playerBattleshipState
   );
 
-  const boardRedux = useSelector((state: RootState) => state.board.value);
+  //If player placed all his ship, 2+3+3+4+5 =17!
+  const isPlayerReady =
+    useSelector((state: RootState) => state.board.value.myBoard.placement)
+      .length === 17;
 
+  console.log(isPlayerReady);
+  const boardRedux = useSelector((state: RootState) => state.board.value);
+  const handleClick = () => {
+    setIsStartButtonOn(true);
+  };
   return (
     <Box
       sx={{
@@ -48,7 +58,18 @@ const Ships = (): JSX.Element => {
           }}
         />
       </Box>
-
+      <Box sx={{ textAlign: "center" }}>
+        <Button sx={{ width: "initial", marginRight: "1rem" }}>
+          Rotate Ship
+        </Button>
+        <Button
+          disabled={!isPlayerReady}
+          onClick={handleClick}
+          sx={{ width: "initial" }}
+        >
+          Start Game
+        </Button>
+      </Box>
       <Box
         sx={{
           padding: "1rem",

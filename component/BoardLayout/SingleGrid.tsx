@@ -57,7 +57,8 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
 
   const dispatch = useDispatch();
 
-  const { isDebugging, currentDrag, currentFragment } = useShipContext();
+  const { isDebugging, currentDrag, currentFragment, isStartButtonOn } =
+    useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
   const onDragOver = (event: React.DragEvent<HTMLDivElement>): void => {
@@ -73,9 +74,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   };
 
   const handleClick = (coordinate: number) => {
-    if (isAttack || canDrag || hasGameFinished) return;
-    if (shipsOnMyBoardRedux.length !== 17)
-      return console.log("player havent ready yet!!");
+    if (isAttack || canDrag || hasGameFinished || !isStartButtonOn) return;
     //if it's opponent board, make an attack!
     if (!canDrag) dispatch(makeAnAttack(coordinate));
 

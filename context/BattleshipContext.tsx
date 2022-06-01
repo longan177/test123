@@ -11,6 +11,8 @@ type BattleshipContextType = {
   setCurrentFragment: React.Dispatch<React.SetStateAction<number>>;
   hasGameStarted: boolean;
   sethasGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
+  isStartButtonOn: boolean;
+  setIsStartButtonOn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const BattleshipContext = React.createContext<BattleshipContextType | null>(
@@ -31,6 +33,8 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [currentDrag, setCurrentDrag] = useState(null);
   const [currentFragment, setCurrentFragment] = useState(0);
   const [hasGameStarted, sethasGameStarted] = useState<boolean>(false);
+  const [isStartButtonOn, setIsStartButtonOn] =
+    useState<BattleshipContextType["isStartButtonOn"]>(false);
 
   let value = {
     isDebugging,
@@ -41,6 +45,8 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
     setCurrentFragment,
     hasGameStarted,
     sethasGameStarted,
+    isStartButtonOn,
+    setIsStartButtonOn,
   };
   return (
     <BattleshipContext.Provider value={value}>
