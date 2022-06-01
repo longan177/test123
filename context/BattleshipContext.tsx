@@ -13,6 +13,8 @@ type BattleshipContextType = {
   sethasGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
   isStartButtonOn: boolean;
   setIsStartButtonOn: React.Dispatch<React.SetStateAction<boolean>>;
+  isRotateButtonOn: boolean;
+  setIsRotateButtonOn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const BattleshipContext = React.createContext<BattleshipContextType | null>(
@@ -35,6 +37,8 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
   const [hasGameStarted, sethasGameStarted] = useState<boolean>(false);
   const [isStartButtonOn, setIsStartButtonOn] =
     useState<BattleshipContextType["isStartButtonOn"]>(false);
+  const [isRotateButtonOn, setIsRotateButtonOn] =
+    useState<BattleshipContextType["isRotateButtonOn"]>(false);
 
   let value = {
     isDebugging,
@@ -47,6 +51,8 @@ const BattleshipProvider = ({ children }: Props): JSX.Element => {
     sethasGameStarted,
     isStartButtonOn,
     setIsStartButtonOn,
+    isRotateButtonOn,
+    setIsRotateButtonOn,
   };
   return (
     <BattleshipContext.Provider value={value}>

@@ -57,8 +57,13 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
 
   const dispatch = useDispatch();
 
-  const { isDebugging, currentDrag, currentFragment, isStartButtonOn } =
-    useShipContext();
+  const {
+    isDebugging,
+    currentDrag,
+    currentFragment,
+    isStartButtonOn,
+    isRotateButtonOn,
+  } = useShipContext();
 
   //Will try to implement and test useCallback hook later in the future when the callback functions grow bigger and bigger,
   const onDragOver = (event: React.DragEvent<HTMLDivElement>): void => {
@@ -98,8 +103,12 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   ): void => {
     event.preventDefault();
     const { name, size } = currentDrag;
-    // console.log(`--------drop-------`, currentDrag);
-    let shipLastPosition = coordinate + size - currentFragment;
+    let shipLastPosition: number;
+    if (isRotateButtonOn) {
+      shipLastPosition = coordinate - 10 * (size - currentFragment);
+    } else {
+      shipLastPosition = coordinate + size - currentFragment;
+    }
     const notAllowHorizontal: number[] = [
       1, 11, 21, 31, 41, 51, 61, 71, 81, 91, 2, 12, 22, 32, 42, 52, 62, 72, 82,
       92, 3, 13, 23, 33, 43, 53, 63, 73, 83, 93, 4, 14, 24, 34, 44, 54, 64, 74,
@@ -110,13 +119,33 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       101,
       102,
       103,
+      104,
       ...notAllowHorizontal.splice(0, (size - 1) * 10),
     ];
 
-    const placeShip = (): void => {
+    const notAllowVertical: number[] = [
+      91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 81, 82, 83, 84, 85, 86, 87, 88,
+      89, 90, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 61, 62, 63, 64, 65, 66,
+      67, 68, 69, 70,
+    ];
+
+    const updateNotAllowVertical: number[] = [
+      ...notAllowVertical.splice(0, (size - 1) * 10),
+    ];
+    const placeShip = (alignment: "horizontal" | "vertical"): void => {
       let placedGrid: number[] = [];
-      for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
-        placedGrid.push(i);
+      if (alignment === "horizontal") {
+        for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
+          placedGrid.push(i);
+        }
+      } else {
+        for (
+          let i = shipLastPosition;
+          i <= shipLastPosition + (size - 1) * 10;
+          i += 10
+        ) {
+          placedGrid.push(i);
+        }
       }
       let existingShipsRedux: number[] = shipsOnMyBoardRedux.map(
         ship => ship.coordinate
@@ -127,20 +156,35 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       );
 
       if (overlapGridRedux.length > 0) return;
-
-      for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
-        dispatch(insertShip({ coordinate: i, ship: name }));
+      if (alignment === "horizontal") {
+        for (let i = shipLastPosition; i > shipLastPosition - size; i--) {
+          dispatch(insertShip({ coordinate: i, ship: name }));
+        }
+      } else {
+        for (
+          let i = shipLastPosition;
+          i <= shipLastPosition + (size - 1) * 10;
+          i += 10
+        ) {
+          dispatch(insertShip({ coordinate: i, ship: name }));
+        }
       }
-
-      // console.log("event from placeship");
 
       dispatch(toggleIsPlaced(name));
     };
-
-    if (!updatedNotAllowHorizontal.includes(shipLastPosition)) {
-      placeShip();
+    if (
+      !updatedNotAllowHorizontal.includes(shipLastPosition) &&
+      !isRotateButtonOn
+    ) {
+      placeShip("horizontal");
+    } else if (
+      !updateNotAllowVertical.includes(shipLastPosition) &&
+      isRotateButtonOn &&
+      shipLastPosition > 0
+    ) {
+      placeShip("vertical");
     } else {
-      // console.log("You are not allowed to place here.");
+      return;
     }
   };
 

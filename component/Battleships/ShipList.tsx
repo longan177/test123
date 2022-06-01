@@ -12,8 +12,14 @@ import { useSelector } from "react-redux";
 import Button from "../Button";
 
 const Ships = (): JSX.Element => {
-  const { isDebugging, setIsDebugging, setIsStartButtonOn, isStartButtonOn } =
-    useShipContext();
+  const {
+    isDebugging,
+    setIsDebugging,
+    setIsStartButtonOn,
+    setIsRotateButtonOn,
+    isRotateButtonOn,
+    isStartButtonOn,
+  } = useShipContext();
 
   const battleShipRedux = useSelector(
     (state: RootState) => state.board.value.playerBattleshipState
@@ -24,10 +30,14 @@ const Ships = (): JSX.Element => {
     useSelector((state: RootState) => state.board.value.myBoard.placement)
       .length === 17;
 
-  console.log(isPlayerReady);
+  // console.log(isPlayerReady);
   const boardRedux = useSelector((state: RootState) => state.board.value);
-  const handleClick = () => {
+  const handleClickStart = () => {
     setIsStartButtonOn(true);
+  };
+
+  const handleClickRotate = () => {
+    setIsRotateButtonOn(!isRotateButtonOn);
   };
   return (
     <Box
@@ -59,12 +69,16 @@ const Ships = (): JSX.Element => {
         />
       </Box>
       <Box sx={{ textAlign: "center" }}>
-        <Button sx={{ width: "initial", marginRight: "1rem" }}>
+        <Button
+          disabled={isStartButtonOn}
+          onClick={handleClickRotate}
+          sx={{ width: "initial", marginRight: "1rem" }}
+        >
           Rotate Ship
         </Button>
         <Button
           disabled={!isPlayerReady}
-          onClick={handleClick}
+          onClick={handleClickStart}
           sx={{ width: "initial" }}
         >
           Start Game
@@ -76,11 +90,12 @@ const Ships = (): JSX.Element => {
           display: "flex",
           justifyContent: "center",
           aligItems: "center",
+
           gap: "1rem",
         }}
       >
         {battleShipRedux.map((ship, i) => (
-          <Ship key={i} {...ship} />
+          <Ship key={i} {...ship} isRotateButtonOn={isRotateButtonOn} />
         ))}
       </Box>
       {/* ----------------For debugging purpose only---------------- */}
