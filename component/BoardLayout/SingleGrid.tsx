@@ -256,8 +256,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     if (ship === "battleship") return "pink";
     if (ship === "carrier") return "lightgreen";
   };
-
-  const backgroundColor = `linear-gradient(106.41deg, rgba(141, 134, 187, 0.72) 5.36%, rgba(184, 182, 244, 0.5) 162.64%)`;
+  const backgroundC = "rgba(184, 182, 244, 0.5)";
   const gridColor = (
     canDrag: boolean,
     isAttack: boolean,
@@ -270,15 +269,15 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     if (canDrag && isAttack && !occupiedShip) return "red";
     if (canDrag && !isAttack && occupiedShip)
       return battleshipColorStyling(occupiedShip);
-    if (canDrag && !isAttack && !occupiedShip) return backgroundColor;
+    if (canDrag && !isAttack && !occupiedShip) return backgroundC;
     //------------------------------------------------------
     if (!canDrag && isAttack && isTakenByComputer) return "#fff";
     if (!canDrag && isAttack && !isTakenByComputer) return "red";
     if (!canDrag && !isAttack && occupiedShip && !isDebugging)
-      return backgroundColor;
+      return backgroundC;
     if (!canDrag && !isAttack && occupiedShip && isDebugging)
       return battleshipColorStyling(occupiedShip);
-    if (!canDrag && !isAttack && !occupiedShip) return backgroundColor;
+    if (!canDrag && !isAttack && !occupiedShip) return backgroundC;
   };
 
   return (
@@ -291,12 +290,11 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       onClick={() => handleClick(coordinate)}
       onDragEnter={onDragEnter}
       sx={{
-        backdropFilter: `blur(10px)`,
+        // backdropFilter: `blur(10px)`,
         borderRadius: `5px`,
-        transform: `matrix(1, 0, 0, -1, 0, 0)`,
-
         margin: "0",
         border: "1px solid black",
+        borderRadius: "5px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -324,4 +322,4 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
   );
 };
 
-export default SingleGrid;
+export default React.memo(SingleGrid);

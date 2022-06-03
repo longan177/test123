@@ -46,29 +46,6 @@ const Ships = (): JSX.Element => {
         padding: "1rem",
       }}
     >
-      <Box
-        sx={{
-          textAlign: "center",
-        }}
-      >
-        <FormControlLabel
-          control={
-            <Switch
-              checked={isDebugging}
-              onChange={e => {
-                setIsDebugging(!isDebugging);
-              }}
-              color="primary"
-            />
-          }
-          label={`Debugging Mode : ${isDebugging ? "On" : "Off"}`}
-          labelPlacement="end"
-          sx={{
-            margin: "auto",
-            textAlign: "center",
-          }}
-        />
-      </Box>
       <Box sx={{ textAlign: "center" }}>
         <Button
           disabled={isStartButtonOn}
