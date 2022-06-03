@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { RootState } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, FormEvent } from "react";

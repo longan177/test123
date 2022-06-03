@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import computerBoardRandom from "./computerBoardData";
 export type ShipStatusType = {

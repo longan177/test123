@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Button as ButtonFromMUI } from "@mui/material";
 import { yellow } from "@mui/material/colors";
 import React from "react";

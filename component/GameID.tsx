@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Chip } from "@mui/material";
 
 type Props = {

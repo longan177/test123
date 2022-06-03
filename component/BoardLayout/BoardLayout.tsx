@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Box, Grid } from "@mui/material";
 import { useEffect } from "react";
 import Board from "./Board";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Box } from "@mui/material";
 import { Clear } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
@@ -255,6 +256,7 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     if (ship === "carrier") return "lightgreen";
   };
 
+  const backgroundColor = `linear-gradient(106.41deg, rgba(141, 134, 187, 0.72) 5.36%, rgba(184, 182, 244, 0.5) 162.64%)`;
   const gridColor = (
     canDrag: boolean,
     isAttack: boolean,
@@ -289,12 +291,11 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       sx={{
         margin: "0",
         border: "1px solid black",
-        borderRadius: "5px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
 
         backgroundColor: gridColor(
           canDrag,

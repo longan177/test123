@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Grid, Typography, Box } from "@mui/material";
 import SingleGrid from "./SingleGrid";
 
@@ -25,8 +26,8 @@ const Board = ({ id, title, canDrag }: Props) => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(10,40px)",
-          gap: "0px",
+          gridTemplateColumns: "repeat(10,50px)",
+          gap: "2px",
           justifyContent: "center",
         }}
       >

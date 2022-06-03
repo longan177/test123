@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { red } from "@mui/material/colors";

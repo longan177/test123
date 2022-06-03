@@ -1,3 +1,4 @@
+// @ts-nocheck
 const computerBoardRandom: { coordinate: number; ship: string }[] = [];
 
 export const getRandomWithExclude = (
