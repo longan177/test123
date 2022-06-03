@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { Box } from "@mui/material";
+
 import { Clear } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { RootState } from "../../redux/store";
@@ -269,14 +270,15 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     if (canDrag && isAttack && !occupiedShip) return "red";
     if (canDrag && !isAttack && occupiedShip)
       return battleshipColorStyling(occupiedShip);
-    if (canDrag && !isAttack && !occupiedShip) return "#1e9eff";
+    if (canDrag && !isAttack && !occupiedShip) return backgroundColor;
     //------------------------------------------------------
     if (!canDrag && isAttack && isTakenByComputer) return "#fff";
     if (!canDrag && isAttack && !isTakenByComputer) return "red";
-    if (!canDrag && !isAttack && occupiedShip && !isDebugging) return "#1e9eff";
+    if (!canDrag && !isAttack && occupiedShip && !isDebugging)
+      return backgroundColor;
     if (!canDrag && !isAttack && occupiedShip && isDebugging)
       return battleshipColorStyling(occupiedShip);
-    if (!canDrag && !isAttack && !occupiedShip) return "#1e9eff";
+    if (!canDrag && !isAttack && !occupiedShip) return backgroundColor;
   };
 
   return (
@@ -289,6 +291,10 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
       onClick={() => handleClick(coordinate)}
       onDragEnter={onDragEnter}
       sx={{
+        backdropFilter: `blur(10px)`,
+        borderRadius: `5px`,
+        transform: `matrix(1, 0, 0, -1, 0, 0)`,
+
         margin: "0",
         border: "1px solid black",
         display: "flex",
