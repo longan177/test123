@@ -21,14 +21,14 @@ type Props = {
   canDrag: boolean;
 };
 
-const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
+const SingleGrid = ({ bgColor, coordinate, canDrag }: Props): JSX.Element => {
   const [isAttack, setIsAttack] = useState(false);
   const [occupiedShip, setOccupiedShip] = useState("");
   const [isDestroyed, setIsDestroyed] = useState(false);
   /* -------------------------------------------------------------------------- */
   /*                              value from redux                              */
   /* -------------------------------------------------------------------------- */
-
+  // console.log(bgColor);
   const shipsOnOpponentBoardRedux = useSelector(
     (state: RootState) => state.board.value.opponentBoard.placement
   );
@@ -269,15 +269,14 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
     if (canDrag && isAttack && !occupiedShip) return "red";
     if (canDrag && !isAttack && occupiedShip)
       return battleshipColorStyling(occupiedShip);
-    if (canDrag && !isAttack && !occupiedShip) return backgroundC;
+    if (canDrag && !isAttack && !occupiedShip) return bgColor;
     //------------------------------------------------------
     if (!canDrag && isAttack && isTakenByComputer) return "#fff";
     if (!canDrag && isAttack && !isTakenByComputer) return "red";
-    if (!canDrag && !isAttack && occupiedShip && !isDebugging)
-      return backgroundC;
+    if (!canDrag && !isAttack && occupiedShip && !isDebugging) return bgColor;
     if (!canDrag && !isAttack && occupiedShip && isDebugging)
       return battleshipColorStyling(occupiedShip);
-    if (!canDrag && !isAttack && !occupiedShip) return backgroundC;
+    if (!canDrag && !isAttack && !occupiedShip) return bgColor;
   };
 
   return (
@@ -300,18 +299,24 @@ const SingleGrid = ({ coordinate, canDrag }: Props): JSX.Element => {
         alignItems: "center",
         width: 50,
         height: 50,
+        // border: "5px solid red",
 
-        backgroundColor: gridColor(
+        background: gridColor(
           canDrag,
           isAttack,
           occupiedShip,
           isTakenByComputer,
           isDebugging
         ),
+
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
         transition: "all 0.05s linear",
         "&:hover": {
           backgroundColor: !isAttack && blueGrey[200],
           cursor: "pointer",
+
+          boxShadow: "0 0 0 2px black",
         },
       }}
     >

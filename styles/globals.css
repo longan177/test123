@@ -1,8 +1,9 @@
 html,
 body {
-  background:url('./background.jpg');
+  background:url('./background.jpg')  no-repeat center center ;
+  background-attachment: fixed;
   background-position-y: 10%;
-  background-size: cover;
+  background-size:cover;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,

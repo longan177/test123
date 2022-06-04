@@ -1,5 +1,7 @@
 // @ts-nocheck
 import { Grid, Typography, Box } from "@mui/material";
+import { textAlign } from "@mui/system";
+import { useState } from "react";
 import SingleGrid from "./SingleGrid";
 
 type Props = {
@@ -14,6 +16,20 @@ const Board = ({ id, title, canDrag }: Props) => {
     totalGrid.push(i);
   }
 
+  const [cursor, setCursor] = useState({});
+  const handleMouseMove = e => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+    const percentX = Math.floor((offsetX * 100) / 518);
+    const percentY = Math.floor((offsetY * 100) / 518);
+    setCursor({ percentX, percentY });
+  };
+
+  const backgroundColor = `radial-gradient(
+  at ${cursor.percentX}% ${cursor.percentY}%,  #3498db, #9b59b6
+ )`;
+
   return (
     <Grid key={id} alignContent="center" item md={6}>
       <Typography
@@ -24,7 +40,13 @@ const Board = ({ id, title, canDrag }: Props) => {
         {title}
       </Typography>
       <Box
+        onMouseMove={e => {
+          handleMouseMove(e);
+        }}
         sx={{
+          margin: "0 auto",
+
+          width: "518px",
           display: "grid",
           gridTemplateColumns: "repeat(10,50px)",
           gap: "2px",
@@ -32,7 +54,14 @@ const Board = ({ id, title, canDrag }: Props) => {
         }}
       >
         {totalGrid.map(grid => {
-          return <SingleGrid canDrag={canDrag} coordinate={grid} key={grid} />;
+          return (
+            <SingleGrid
+              bgColor={backgroundColor}
+              canDrag={canDrag}
+              coordinate={grid}
+              key={grid}
+            />
+          );
         })}
       </Box>
     </Grid>
