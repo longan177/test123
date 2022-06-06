@@ -3,6 +3,7 @@ import { Grid, Typography, Box } from "@mui/material";
 import { textAlign } from "@mui/system";
 import { useState } from "react";
 import SingleGrid from "./SingleGrid";
+import Image from "next/image";
 
 type Props = {
   id: number;
@@ -26,10 +27,11 @@ const Board = ({ id, title, canDrag }: Props) => {
     setCursor({ percentX, percentY });
   };
 
-  const backgroundColor = `radial-gradient(
-  at ${cursor.percentX}% ${cursor.percentY}%,  #3498db, #9b59b6
- )`;
+  var backgroundColor = `url("https://static.wikia.nocookie.net/naruto/images/d/dc/Naruto%27s_Sage_Mode.png/revision/latest?cb=20150124180545")`;
 
+  var backgroundColor = `radial-gradient(
+     50px at ${10 + cursor.percentX}% ${cursor.percentY}%,  #3498db, #9b59b6
+     )`;
   return (
     <Grid key={id} alignContent="center" item md={6}>
       <Typography
