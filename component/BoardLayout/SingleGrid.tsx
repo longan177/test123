@@ -256,7 +256,19 @@ const SingleGrid = ({ bgColor, coordinate, canDrag }: Props): JSX.Element => {
     if (ship === "battleship") return "pink";
     if (ship === "carrier") return "lightgreen";
   };
+
+  const backgroundOcc =
+    "linear-gradient(97.63deg, #4F436F -19.48%, #FDBBFF 121.28%)";
   const backgroundC = "rgba(184, 182, 244, 0.5)";
+
+  const BoxShadow =
+    " 0px 0px 15px 3px #E0C8E5, 0px 0px 4.60806px 3px #E0C8E5, 0px 0px 2.68804px 3px #E0C8E5, 0px 0px 1.34403px 3px #E0C8E5, 0px 0px 0.384005px 3px #E0C8E5, 0px 0px 0.192003px 3px #E0C8E5";
+
+  const oriBg =
+    "linear-gradient(205.07deg, rgba(184, 182, 244, 0.65) 26.23%, rgba(119, 116, 157, 0.5) 96.06%)";
+
+  const attackBg =
+    "linear-gradient(97.63deg, #3B3353 -19.48%, #7A5A8C 121.28%)";
   const gridColor = (
     canDrag: boolean,
     isAttack: boolean,
@@ -264,19 +276,19 @@ const SingleGrid = ({ bgColor, coordinate, canDrag }: Props): JSX.Element => {
     isTakenByComputer: boolean,
     isDebugging: boolean
   ) => {
-    if (isDestroyed) return "black";
-    if (canDrag && isAttack && occupiedShip) return "#fff";
-    if (canDrag && isAttack && !occupiedShip) return "red";
-    if (canDrag && !isAttack && occupiedShip)
-      return battleshipColorStyling(occupiedShip);
-    if (canDrag && !isAttack && !occupiedShip) return bgColor;
+    if (isDestroyed) return backgroundOcc;
+    if (canDrag && isAttack && occupiedShip) return backgroundOcc;
+    if (canDrag && isAttack && !occupiedShip) return "rgba(100,100,100,0)";
+    if (canDrag && !isAttack && occupiedShip) return backgroundOcc;
+    if (canDrag && !isAttack && !occupiedShip) return oriBg;
     //------------------------------------------------------
-    if (!canDrag && isAttack && isTakenByComputer) return "#fff";
-    if (!canDrag && isAttack && !isTakenByComputer) return "red";
-    if (!canDrag && !isAttack && occupiedShip && !isDebugging) return bgColor;
+    if (!canDrag && isAttack && isTakenByComputer) return backgroundOcc;
+    if (!canDrag && isAttack && !isTakenByComputer)
+      return "rgba(100,100,100,0)";
+    if (!canDrag && !isAttack && occupiedShip && !isDebugging) return oriBg;
     if (!canDrag && !isAttack && occupiedShip && isDebugging)
-      return battleshipColorStyling(occupiedShip);
-    if (!canDrag && !isAttack && !occupiedShip) return bgColor;
+      return backgroundOcc;
+    if (!canDrag && !isAttack && !occupiedShip) return oriBg;
   };
 
   return (
@@ -292,7 +304,7 @@ const SingleGrid = ({ bgColor, coordinate, canDrag }: Props): JSX.Element => {
         // backdropFilter: `blur(10px)`,
         borderRadius: `5px`,
         margin: "0",
-        border: "1px solid black",
+        // border: "1px solid black",
         borderRadius: "5px",
         display: "flex",
         justifyContent: "center",
@@ -308,10 +320,21 @@ const SingleGrid = ({ bgColor, coordinate, canDrag }: Props): JSX.Element => {
           isTakenByComputer,
           isDebugging
         ),
-
-        backgroundSize: "cover",
-        backgroundAttachment: "fixed",
-        transition: "all 0.05s linear",
+        // opacity: isAttack && !occupiedShip && !isDestroyed && 0,
+        animation: isAttack && !occupiedShip && !isDestroyed && "fade 1s",
+        // outline: "none",
+        // backdropFilter: "blur(3px)",
+        boxShadow: occupiedShip && isDestroyed && BoxShadow,
+        transition: "all 0.1s linear",
+        "@keyframes fade": {
+          "0%": {
+            background: backgroundOcc,
+            opacity: 1,
+          },
+          "100%": {
+            opacity: 0,
+          },
+        },
         "&:hover": {
           backgroundColor: !isAttack && blueGrey[200],
           cursor: "pointer",
@@ -322,7 +345,7 @@ const SingleGrid = ({ bgColor, coordinate, canDrag }: Props): JSX.Element => {
     >
       <Box sx={{ position: "absolute" }}>{isDebugging && coordinate}</Box>
 
-      {isAttack && <Clear fontSize="large" />}
+      {/* {isAttack && <Clear fontSize="large" />} */}
     </Box>
   );
 };
